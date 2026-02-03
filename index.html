@@ -24,123 +24,285 @@
       line-height: 1.6;
     }
 
-    header { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; }
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
     .hero { max-width: 900px; }
-    .hero h1 { font-size: clamp(3rem, 8vw, 5rem); color: var(--accent); margin-bottom: 10px; letter-spacing:2px; }
-    .hero p { font-size: 1.2rem; color: var(--muted); margin-bottom:30px; }
 
-    .buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
-    .btn { padding: 14px 28px; border-radius: 10px; font-size: 1rem; text-decoration: none; font-weight:600; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
-    .btn.primary { background: var(--accent); color:#000; box-shadow: 0 0 25px rgba(201,180,88,0.35); }
-    .btn.primary:hover { transform: translateY(-2px); box-shadow:0 0 35px rgba(201,180,88,0.6); }
-    .btn.secondary { border:2px solid var(--accent); color: var(--accent); }
-    .btn.secondary:hover { background: rgba(201,180,88,0.1); transform: translateY(-2px); }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
 
-    section { padding:80px 20px; display:flex; justify-content:center; }
-    .container { max-width:1000px; width:100%; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:30px; }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
 
-    .card { background: linear-gradient(180deg,#191919,var(--card)); border-radius:18px; padding:25px; box-shadow:0 10px 30px rgba(0,0,0,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .card:hover { transform: translateY(-4px); box-shadow:0 15px 45px rgba(0,0,0,0.6); }
-    .card h2 { color: var(--accent); margin-bottom:10px; }
-    .card p, .card li { color: var(--muted); font-size:0.95rem; }
-    ul { padding-left:18px; }
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-    .ip-box { background:#0f0f0f; border:2px dashed var(--accent); padding:15px; border-radius:12px; margin-top:10px; font-family:monospace; color:var(--accent); user-select: all; }
+    .btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 1rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+    }
 
-    footer { text-align:center; padding:30px 15px; font-size:0.85rem; color:var(--muted); border-top:1px solid #222; }
+    .btn.primary {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 25px rgba(201, 180, 88, 0.35);
+    }
+
+    .btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(201, 180, 88, 0.6);
+    }
+
+    .btn.secondary {
+      border: 2px solid var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(201, 180, 88, 0.1);
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 80px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #191919, var(--card));
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+    }
+
+    .card h2 {
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    ul { padding-left: 18px; }
+
+    footer {
+      text-align: center;
+      padding: 30px 15px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid #222;
+    }
+
+    .ip-box {
+      background: #0f0f0f;
+      border: 2px dashed var(--accent);
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-family: monospace;
+      color: var(--accent);
+      user-select: all;
+    }
+
+    .crate-result {
+      margin-top: 10px;
+      font-family: monospace;
+      color: var(--accent);
+      word-break: break-all;
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="hero">
-      <h1>HELVORNSMP</h1>
-      <p>Java & Bedrock • Anarchy Survival • No Hacks</p>
+<header>
+  <div class="hero">
+    <h1>HELVORNSMP</h1>
+    <p>Java & Bedrock • Anarchy Survival • No Hacks</p>
 
-      <div class="buttons">
-        <a class="btn primary" href="#join">Join the Server</a>
-        <a class="btn secondary" href="https://discord.gg/4H3Cgj77DH" target="_blank">Join Discord</a>
-      </div>
+    <div class="buttons">
+      <a class="btn primary" href="#join">Join the Server</a>
+      <a class="btn secondary" href="https://discord.gg/4H3Cgj77DH" target="_blank">Join Discord</a>
+    </div>
 
-      <div style="margin-top:30px;">
-        <strong>Server Status:</strong>
-        <div id="status" style="margin-top:10px; font-size:1.1rem; color: var(--accent);">Checking…</div>
-        <div style="margin-top:6px; font-size:0.85rem; color: var(--muted);">If sleeping, try joining once to wake it up.</div>
+    <div style="margin-top:30px;">
+      <strong>Server Status:</strong>
+      <div id="status" style="margin-top:10px; font-size:1.1rem; color: var(--accent);">Checking…</div>
+      <div style="margin-top:6px; font-size:0.85rem; color: var(--muted);">
+        If sleeping, try joining once to wake it up.
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <section id="join">
-    <div class="container">
-      <div class="card">
-        <h2>Server Info</h2>
-        <p>Pure anarchy survival with minimal rules. Griefing, raiding, and chaos are allowed — hacking is not.</p>
-        <div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
-        <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('java-ip')">Copy Java IP</button>
-        <div class="ip-box" style="margin-top:15px;">Bedrock Port: <span id="bedrock-ip">helvornsmp.playserver.pro:35098</span></div>
-        <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('bedrock-ip')">Copy Bedrock IP</button>
-      </div>
+<section id="join">
+  <div class="container">
+    <!-- Server Info Card -->
+    <div class="card">
+      <h2>Server Info</h2>
+      <p>Pure anarchy survival with minimal rules. Griefing, raiding, and chaos are allowed — hacking is not.</p>
 
-      <div class="card">
-        <h2>Rules</h2>
-        <ul>
-          <li>No hacked clients or unfair mods</li>
-          <li>Griefing & raiding are allowed</li>
-          <li>Cussing allowed (no sexual content)</li>
-          <li>No doxxing or real-life threats</li>
-        </ul>
-      </div>
+      <div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
+      <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('java-ip')">Copy Java IP</button>
 
-      <div class="card">
-        <h2>Why Helvorn?</h2>
-        <ul>
-          <li>Java & Bedrock crossplay</li>
-          <li>Low-lag survival gameplay</li>
-          <li>Community-driven anarchy</li>
-          <li>Simple, no pay-to-win</li>
-          <li>Cracked support available</li>
-          <li>Active admins always online</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h2>How to Start the Server</h2>
-        <p>If the server looks offline, don’t panic. This server sleeps when nobody is on it.</p>
-        <ul>
-          <li>Try to join the server</li>
-          <li>When it starts connecting, click <strong>Cancel</strong></li>
-          <li>Wait until the server status says <strong>Running</strong></li>
-          <li>Join again — it will let you in</li>
-        </ul>
-        <p>This wakes the server up. It’s normal and only takes a minute.</p>
-      </div>
+      <div class="ip-box" style="margin-top:15px;">Bedrock Port: <span id="bedrock-ip">helvornsmp.playserver.pro:35098</span></div>
+      <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('bedrock-ip')">Copy Bedrock IP</button>
     </div>
-  </section>
 
-  <footer>© 2026 HelvornSMP • Not affiliated with Mojang</footer>
+    <!-- Rules Card -->
+    <div class="card">
+      <h2>Rules</h2>
+      <ul>
+        <li>No hacked clients or unfair mods</li>
+        <li>Griefing & raiding are allowed</li>
+        <li>Cussing allowed (no sexual content)</li>
+        <li>No doxxing or real-life threats</li>
+      </ul>
+    </div>
+
+    <!-- Why Helvorn Card -->
+    <div class="card">
+      <h2>Why Helvorn?</h2>
+      <ul>
+        <li>Java & Bedrock crossplay</li>
+        <li>Low-lag survival gameplay</li>
+        <li>Community-driven anarchy</li>
+        <li>Simple, no pay-to-win</li>
+        <li>Cracked support & active admins</li>
+      </ul>
+    </div>
+
+    <!-- How to Start Card -->
+    <div class="card">
+      <h2>How to Start the Server</h2>
+      <p>If the server looks offline, don’t panic. This server sleeps when nobody is on it.</p>
+      <ul>
+        <li>Try to join the server</li>
+        <li>When it starts connecting, click <strong>Cancel</strong></li>
+        <li>Wait until the server status says <strong>Running</strong></li>
+        <li>Join again — it will let you in</li>
+      </ul>
+      <p>This wakes the server up. It’s normal and only takes a minute.</p>
+    </div>
+
+    <!-- Daily Crate Card -->
+    <div class="card">
+      <h2>Daily Crate</h2>
+      <p>Claim a free Minecraft item every 24 hours! Your code will tell us exactly what you got. Only one claim per day.</p>
+      <button class="btn primary" id="openCrate">Open Daily Crate</button>
+      <div class="crate-result" id="crateResult"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 HelvornSMP • Not affiliated with Mojang
+</footer>
 
 <script>
+  // Server Status
   const statusEl = document.getElementById("status");
-
   function updateStatus() {
     fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
       .then(res => res.json())
       .then(data => {
-        if(data.online) { statusEl.textContent = "🟢 Reachable"; }
-        else { statusEl.textContent = "🔴 Sleeping"; }
+        if (data.online) {
+          statusEl.textContent = "🟢 Running";
+        } else {
+          statusEl.textContent = "🔴 Sleeping";
+        }
       })
-      .catch(() => { statusEl.textContent = "⚠️ Status unavailable"; });
+      .catch(() => {
+        statusEl.textContent = "⚠️ Status unavailable";
+      });
   }
-
   updateStatus();
   setInterval(updateStatus, 30000);
 
+  // Copy IP
   function copyIP(id) {
     const text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text).then(()=>{ alert("Copied to clipboard: " + text); });
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied to clipboard: " + text);
+    });
   }
+
+  // Daily Crate System
+  const lootTable = [
+    "DIA","IRN","GLD","TNT","GAP","BOK","DRT","STN","STK","BOW","ARR","EMR","NIT"
+    // Add all other Minecraft items here
+  ];
+
+  function generateCrateCode(itemCode) {
+    const now = new Date();
+    const yy = String(now.getFullYear()).slice(2);
+    const mm = String(now.getMonth()+1).padStart(2,'0');
+    const dd = String(now.getDate()).padStart(2,'0');
+    const hh = String(now.getHours()).padStart(2,'0');
+    const min = String(now.getMinutes()).padStart(2,'0');
+    const rand = Math.random().toString(36).substring(2,5).toUpperCase();
+    return `HEL-${yy}${mm}${dd}-${hh}${min}-${itemCode}-${rand}`;
+  }
+
+  function openCrate() {
+    const lastClaim = localStorage.getItem("crateLastClaim");
+    const now = Date.now();
+    if (lastClaim && now - lastClaim < 24*60*60*1000) {
+      alert("You can only claim once every 24 hours!");
+      return;
+    }
+
+    localStorage.setItem("crateLastClaim", now);
+
+    const itemCode = lootTable[Math.floor(Math.random() * lootTable.length)];
+    const code = generateCrateCode(itemCode);
+
+    document.getElementById("crateResult").textContent = `Your crate code: ${code}`;
+  }
+
+  document.getElementById("openCrate").addEventListener("click", openCrate);
 </script>
 
 </body>
 </html>
+
 
