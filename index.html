@@ -3,130 +3,204 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HelvornSMP</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <title>HelvornSMP • Anarchy Survival</title>
+  <meta name="description" content="HelvornSMP is a Java & Bedrock Minecraft anarchy survival server. Griefing allowed. No hacking." />
+
   <style>
-    body {
+    :root {
+      --bg: #0b0b0b;
+      --card: #141414;
+      --accent: #c9b458; /* faded yellow */
+      --text: #eaeaea;
+      --muted: #a0a0a0;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: 'Press Start 2P', monospace;
-      background: radial-gradient(circle at top, #2b1200, #0b0500 70%);
-      color: #ffd9a0;
-      text-align: center;
+      padding: 0;
     }
+
+    body {
+      background: radial-gradient(circle at top, #1a1a1a, var(--bg));
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
     header {
-      padding: 70px 20px;
-      background: linear-gradient(180deg, rgba(60,25,0,0.85), rgba(10,5,0,0.9));
-      box-shadow: 0 6px 30px rgba(0,0,0,0.8);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
     }
-    h1 {
-      font-size: 2.4rem;
-      margin-bottom: 12px;
-      color: #ff9f1a;
-      text-shadow:
-        0 0 6px rgba(255,159,26,0.9),
-        0 0 18px rgba(255,110,0,0.8),
-        0 0 30px rgba(180,60,0,0.7);
-    }
-    .tagline {
-      font-size: 0.8rem;
-      opacity: 0.95;
-      color: #ffd08a;
-    }
-    section {
-      padding: 45px 20px;
+
+    .hero {
       max-width: 900px;
-      margin: auto;
     }
-    .card {
-      background: linear-gradient(180deg, rgba(40,15,0,0.75), rgba(15,6,0,0.85));
-      border: 1px solid rgba(255,140,40,0.25);
-      border-radius: 16px;
-      padding: 28px;
-      margin: 24px 0;
-      box-shadow:
-        0 10px 35px rgba(0,0,0,0.7),
-        inset 0 0 18px rgba(255,120,20,0.15);
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 10px;
     }
-    .card h2 {
-      color: #ffb347;
-      font-size: 1.1rem;
-      margin-bottom: 16px;
-      text-shadow: 0 0 10px rgba(255,140,40,0.6);
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 30px;
     }
-    .ip {
-      background: #0d0500;
-      padding: 16px 18px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #ffb347;
-      box-shadow:
-        inset 0 0 14px rgba(255,140,40,0.45),
-        0 0 18px rgba(255,90,0,0.35);
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
     }
-    footer {
-      padding: 22px;
-      font-size: 0.65rem;
-      opacity: 0.75;
-      color: #ffcf8a;
-    }
-    a {
-      color: #ffb347;
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 1rem;
       text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
-    a:hover {
-      text-decoration: underline;
-      color: #ffd08a;
+
+    .btn.primary {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 25px rgba(201, 180, 88, 0.35);
+    }
+
+    .btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(201, 180, 88, 0.6);
+    }
+
+    .btn.secondary {
+      border: 2px solid var(--accent);
+      color: var(--accent);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(201, 180, 88, 0.1);
+      transform: translateY(-2px);
+    }
+
+    section {
+      padding: 80px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #191919, var(--card));
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+    }
+
+    .card h2 {
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    ul {
+      padding-left: 18px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 15px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid #222;
+    }
+
+    .ip-box {
+      background: #0f0f0f;
+      border: 2px dashed var(--accent);
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-family: monospace;
+      color: var(--accent);
+      user-select: all;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>HelvornSMP</h1>
-    <p class="tagline">Anarchy Survival • No Hacks • Burn the World</p>
+    <div class="hero">
+      <h1>HELVORNSMP</h1>
+      <p>Java & Bedrock • Anarchy Survival • No Hacks</p>
+
+      <div class="buttons">
+        <a class="btn primary" href="#join">Join the Server</a>
+        <a class="btn secondary" href="https://discord.gg/" target="_blank">Join Discord</a>
+      </div>
+    </div>
   </header>
 
-  <section>
-    <div class="card">
-      <h2>🌍 About the Server</h2>
-      <p>
-        HelvornSMP is a true anarchy Minecraft server. Griefing, raiding, and PvP
-        are fully allowed. Trust no one.
-        The only rule that exists: no hacked clients or cheats.
-      </p>
-    </div>
+  <section id="join">
+    <div class="container">
+      <div class="card">
+        <h2>Server Info</h2>
+        <p>Pure anarchy survival with minimal rules. Griefing, raiding, and chaos are allowed — hacking is not.</p>
+        <div class="ip-box">Java IP: helvornsmp.playserver.pro</div>
+        <div class="ip-box">Bedrock Port: 35098</div>
+      </div>
 
-    <div class="card">
-      <h2>⚔️ Server Rules</h2>
-      <p>• Griefing: Allowed</p>
-      <p>• PvP: Allowed</p>
-      <p>• Raiding: Allowed</p>
-      <p>• Hacking / Cheats: NOT Allowed</p>
-    </div>
+      <div class="card">
+        <h2>Rules</h2>
+        <ul>
+          <li>No hacked clients or unfair mods</li>
+          <li>Griefing & raiding are allowed</li>
+          <li>Cussing allowed (no sexual content)</li>
+          <li>No doxxing or real-life threats</li>
+        </ul>
+      </div>
 
-    <div class="card">
-      <h2>🔥 Join HelvornSMP</h2>
-      <p>Java IP:</p>
-      <div class="ip">helvornsmp.playserver.pro</div>
-      <p style="margin-top:18px;">Bedrock Port:</p>
-      <div class="ip">35098</div>
-      <p style="margin-top:16px; font-size:0.7rem;">Java & Bedrock Supported</p>
-    </div>
-
-    <div class="card">
-      <h2>💬 Community</h2>
-      <p>
-        Join the Discord for chaos, updates, and player reports.
-      </p>
-      <p><a href="https://discord.gg/AjFRUgwR" target="_blank">discord.gg/AjFRUgwR</a></p>
+      <div class="card">
+        <h2>Why Helvorn?</h2>
+        <ul>
+          <li>Java & Bedrock crossplay</li>
+          <li>Low-lag survival gameplay</li>
+          <li>Community-driven anarchy</li>
+          <li>Simple, no pay-to-win</li>
+        </ul>
+      </div>
     </div>
   </section>
 
   <footer>
-    © 2026 HelvornSMP • Not affiliated with Mojang or Microsoft
+    © 2026 HelvornSMP • Not affiliated with Mojang
   </footer>
 
 </body>
 </html>
+
