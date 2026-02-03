@@ -163,6 +163,14 @@
         <a class="btn primary" href="#join">Join the Server</a>
         <a class="btn secondary" href="https://discord.gg/" target="_blank">Join Discord</a>
       </div>
+
+      <div style="margin-top:30px;">
+        <strong>Server Status:</strong>
+        <div id="status" style="margin-top:10px; font-size:1.1rem; color: var(--accent);">Checking…</div>
+        <div style="margin-top:6px; font-size:0.85rem; color: var(--muted);">
+          If sleeping, try joining once to wake it up.
+        </div>
+      </div>
     </div>
   </header>
 
@@ -199,7 +207,7 @@
         <h2>How to Start the Server</h2>
         <p>If the server looks offline, don’t panic. This server sleeps when nobody is on it.</p>
         <ul>
-          <li>Starting the Server!</li>
+          <li>Try to join the server</li>
           <li>When it starts connecting, click <strong>Cancel</strong></li>
           <li>Wait until the server status says <strong>Running</strong></li>
           <li>Join again — it will let you in</li>
@@ -213,7 +221,27 @@
     © 2026 HelvornSMP • Not affiliated with Mojang
   </footer>
 
+<script>
+  const statusEl = document.getElementById("status");
+
+  function updateStatus() {
+    fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
+      .then(res => res.json())
+      .then(data => {
+        if (data.online) {
+          statusEl.textContent = "🟢 Running";
+        } else {
+          statusEl.textContent = "🔴 Sleeping";
+        }
+      })
+      .catch(() => {
+        statusEl.textContent = "⚠️ Status unavailable";
+      });
+  }
+
+  updateStatus();
+  setInterval(updateStatus, 30000);
+</script>
+
 </body>
 </html>
-
-
