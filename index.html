@@ -229,7 +229,7 @@
       .then(res => res.json())
       .then(data => {
         if (data.online) {
-          statusEl.textContent = "🟢 Running";
+          statusEl.textContent = "🟢 Reachable";
         } else {
           statusEl.textContent = "🔴 Sleeping";
         }
