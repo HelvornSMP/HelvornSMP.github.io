@@ -10,16 +10,12 @@
     :root {
       --bg: #0b0b0b;
       --card: #141414;
-      --accent: #c9b458; /* faded yellow */
+      --accent: #c9b458;
       --text: #eaeaea;
       --muted: #a0a0a0;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: radial-gradient(circle at top, #1a1a1a, var(--bg));
@@ -37,119 +33,29 @@
       padding: 40px 20px;
     }
 
-    .hero {
-      max-width: 900px;
-    }
+    .hero { max-width: 900px; }
+    .hero h1 { font-size: clamp(3rem, 8vw, 5rem); color: var(--accent); margin-bottom: 10px; letter-spacing:2px; }
+    .hero p { font-size: 1.2rem; color: var(--muted); margin-bottom:30px; }
 
-    .hero h1 {
-      font-size: clamp(3rem, 8vw, 5rem);
-      letter-spacing: 2px;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
+    .buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 14px 28px; border-radius: 10px; font-size: 1rem; text-decoration: none; font-weight:600; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+    .btn.primary { background: var(--accent); color:#000; box-shadow: 0 0 25px rgba(201,180,88,0.35); }
+    .btn.primary:hover { transform: translateY(-2px); box-shadow:0 0 35px rgba(201,180,88,0.6); }
+    .btn.secondary { border:2px solid var(--accent); color: var(--accent); }
+    .btn.secondary:hover { background: rgba(201,180,88,0.1); transform: translateY(-2px); }
 
-    .hero p {
-      font-size: 1.2rem;
-      color: var(--muted);
-      margin-bottom: 30px;
-    }
+    section { padding:80px 20px; display:flex; justify-content:center; }
+    .container { max-width:1000px; width:100%; display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:30px; }
 
-    .buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    .card { background: linear-gradient(180deg,#191919,var(--card)); border-radius:18px; padding:25px; box-shadow:0 10px 30px rgba(0,0,0,0.4); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow:0 15px 45px rgba(0,0,0,0.6); }
+    .card h2 { color: var(--accent); margin-bottom:10px; }
+    .card p, .card li { color: var(--muted); font-size:0.95rem; }
+    ul { padding-left:18px; }
 
-    .btn {
-      padding: 14px 28px;
-      border-radius: 10px;
-      font-size: 1rem;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
+    .ip-box { background:#0f0f0f; border:2px dashed var(--accent); padding:15px; border-radius:12px; margin-top:10px; font-family:monospace; color:var(--accent); user-select: all; }
 
-    .btn.primary {
-      background: var(--accent);
-      color: #000;
-      box-shadow: 0 0 25px rgba(201, 180, 88, 0.35);
-    }
-
-    .btn.primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 35px rgba(201, 180, 88, 0.6);
-    }
-
-    .btn.secondary {
-      border: 2px solid var(--accent);
-      color: var(--accent);
-    }
-
-    .btn.secondary:hover {
-      background: rgba(201, 180, 88, 0.1);
-      transform: translateY(-2px);
-    }
-
-    section {
-      padding: 80px 20px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .container {
-      max-width: 1000px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: linear-gradient(180deg, #191919, var(--card));
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 15px 45px rgba(0,0,0,0.6);
-    }
-
-    .card h2 {
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .card p, .card li {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    ul {
-      padding-left: 18px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 15px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      border-top: 1px solid #222;
-    }
-
-    .ip-box {
-      background: #0f0f0f;
-      border: 2px dashed var(--accent);
-      padding: 15px;
-      border-radius: 12px;
-      margin-top: 10px;
-      font-family: monospace;
-      color: var(--accent);
-      user-select: all;
-    }
+    footer { text-align:center; padding:30px 15px; font-size:0.85rem; color:var(--muted); border-top:1px solid #222; }
   </style>
 </head>
 <body>
@@ -167,9 +73,7 @@
       <div style="margin-top:30px;">
         <strong>Server Status:</strong>
         <div id="status" style="margin-top:10px; font-size:1.1rem; color: var(--accent);">Checking…</div>
-        <div style="margin-top:6px; font-size:0.85rem; color: var(--muted);">
-          If sleeping, try joining once to wake it up.
-        </div>
+        <div style="margin-top:6px; font-size:0.85rem; color: var(--muted);">If sleeping, try joining once to wake it up.</div>
       </div>
     </div>
   </header>
@@ -179,14 +83,10 @@
       <div class="card">
         <h2>Server Info</h2>
         <p>Pure anarchy survival with minimal rules. Griefing, raiding, and chaos are allowed — hacking is not.</p>
-
         <div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
         <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('java-ip')">Copy Java IP</button>
-
         <div class="ip-box" style="margin-top:15px;">Bedrock Port: <span id="bedrock-ip">helvornsmp.playserver.pro:35098</span></div>
         <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('bedrock-ip')">Copy Bedrock IP</button>
-      </div>
-        <div class="ip-box">Bedrock Port: 35098</div>
       </div>
 
       <div class="card">
@@ -223,9 +123,7 @@
     </div>
   </section>
 
-  <footer>
-    © 2026 HelvornSMP • Not affiliated with Mojang
-  </footer>
+  <footer>© 2026 HelvornSMP • Not affiliated with Mojang</footer>
 
 <script>
   const statusEl = document.getElementById("status");
@@ -234,15 +132,10 @@
     fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
       .then(res => res.json())
       .then(data => {
-        if (data.online) {
-          statusEl.textContent = "🟢 Running";
-        } else {
-          statusEl.textContent = "🔴 Sleeping";
-        }
+        if(data.online) { statusEl.textContent = "🟢 Running"; }
+        else { statusEl.textContent = "🔴 Sleeping"; }
       })
-      .catch(() => {
-        statusEl.textContent = "⚠️ Status unavailable";
-      });
+      .catch(() => { statusEl.textContent = "⚠️ Status unavailable"; });
   }
 
   updateStatus();
@@ -250,11 +143,10 @@
 
   function copyIP(id) {
     const text = document.getElementById(id).textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Copied to clipboard: " + text);
-    });
+    navigator.clipboard.writeText(text).then(()=>{ alert("Copied to clipboard: " + text); });
   }
 </script>
 
 </body>
 </html>
+
