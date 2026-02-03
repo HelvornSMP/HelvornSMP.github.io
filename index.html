@@ -179,7 +179,13 @@
       <div class="card">
         <h2>Server Info</h2>
         <p>Pure anarchy survival with minimal rules. Griefing, raiding, and chaos are allowed — hacking is not.</p>
-        <div class="ip-box">Java IP: helvornsmp.playserver.pro</div>
+
+        <div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
+        <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('java-ip')">Copy Java IP</button>
+
+        <div class="ip-box" style="margin-top:15px;">Bedrock Port: <span id="bedrock-ip">helvornsmp.playserver.pro:35098</span></div>
+        <button class="btn secondary" style="margin-top:10px;" onclick="copyIP('bedrock-ip')">Copy Bedrock IP</button>
+      </div>
         <div class="ip-box">Bedrock Port: 35098</div>
       </div>
 
@@ -229,7 +235,7 @@
       .then(res => res.json())
       .then(data => {
         if (data.online) {
-          statusEl.textContent = "🟢 Reachable";
+          statusEl.textContent = "🟢 Running";
         } else {
           statusEl.textContent = "🔴 Sleeping";
         }
@@ -241,6 +247,13 @@
 
   updateStatus();
   setInterval(updateStatus, 30000);
+
+  function copyIP(id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Copied to clipboard: " + text);
+    });
+  }
 </script>
 
 </body>
