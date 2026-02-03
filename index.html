@@ -126,7 +126,7 @@
     fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
       .then(res => res.json())
       .then(data => {
-        if(data.online) { statusEl.textContent = "🟢 Running"; }
+        if(data.online) { statusEl.textContent = "🟢 Reachable"; }
         else { statusEl.textContent = "🔴 Sleeping"; }
       })
       .catch(() => { statusEl.textContent = "⚠️ Status unavailable"; });
