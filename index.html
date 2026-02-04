@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>HelvornSMP • Anarchy Survival</title>
 
+  <meta name="description" content="HelvornSMP — Java & Bedrock anarchy survival. Join the community and play with crossplay support." />
+  <meta property="og:title" content="HelvornSMP • Anarchy Survival" />
+  <meta property="og:description" content="Java & Bedrock anarchy survival server. True anarchy, active admins." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b0b0b" />
+  <link rel="manifest" href="manifest.json">
+
 <style>
 :root{
   --bg:#0b0b0b;
@@ -13,6 +20,19 @@
   --text:#eaeaea;
   --muted:#a0a0a0;
 }
+
+/* Light theme overrides (toggle with data-theme="light") */
+[data-theme="light"]{
+  --bg:#ffffff;
+  --card:#f6f6f6;
+  --accent:#c9b458;
+  --text:#111111;
+  --muted:#444444;
+}
+
+/* Skip link for keyboard users */
+.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+.skip-link:focus{left:10px;top:10px;width:auto;height:auto;padding:8px 12px;background:#000;color:#fff;border-radius:6px;z-index:9999}
 
 *{box-sizing:border-box;margin:0;padding:0;}
 
@@ -170,6 +190,8 @@ footer{
 
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
 <header>
 <div class="hero">
 <h1>HELVORNSMP</h1>
@@ -183,15 +205,20 @@ footer{
 <!-- Admin button -->
 <a href="admin.html"><button class="admin-btn">🛡 Admin Panel</button></a>
 
+<!-- Theme toggle -->
+<div style="margin-top:14px;">
+  <button id="themeToggle" class="btn secondary" aria-pressed="false">Toggle Theme</button>
+</div>
+
 <div style="margin-top:30px;">
 <strong>Server Status:</strong>
-<div id="status" style="margin-top:10px;color:var(--accent)">Checking…</div>
+<div id="status" style="margin-top:10px;color:var(--accent)" aria-live="polite">Checking…</div>
 </div>
 
 </div>
 </header>
-
-<section id="join">
+ 
+<section id="join" role="region" aria-label="Join Server" tabindex="-1">
 <div class="container">
 
 <div class="card">
@@ -254,160 +281,7 @@ Above all, I strive to be kind, supportive, and encouraging to everyone I meet, 
 © 2026 HelvornSMP
 </footer>
 
-<script>
-/* server status */
-function updateStatus(){
-fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
-.then(r=>r.json())
-.then(data=>{
-status.textContent=data.online?"🟢 Reachable":"🔴 Sleeping";
-});
-}
-updateStatus();
-setInterval(updateStatus,30000);
-
-/* copy ip */
-function copyIP(id){
-navigator.clipboard.writeText(document.getElementById(id).textContent);
-alert("Copied!");
-}
-
-/* loot */
-const loot=[
-{item:"Diamond x6",rarity:"Uncommon"},
-{item:"Totem of Undying",rarity:"Rare"},
-{item:"Elytra",rarity:"Ultra Rare"},
-{item:"Beacon",rarity:"Legendary"},
-{item:"Nether Star",rarity:"Legendary"},
-{item:"Shulker Box",rarity:"Ultra Rare"},
-{item:"Enchanted Golden Apple",rarity:"Rare"},
-{item:"Iron Ingot x16",rarity:"Common"}
-];
-
-const weights={
-"Common":50,
-"Uncommon":25,
-"Rare":15,
-"Ultra Rare":8,
-"Legendary":2
-};
-
-let lastCode="";
-
-/* weighted pick */
-function pickItem(){
-let list=[];
-loot.forEach(i=>{
-for(let x=0;x<weights[i.rarity];x++) list.push(i);
-});
-return list[Math.floor(Math.random()*list.length)];
-}
-
-/* code gen */
-function makeCode(item,rarity){
-const d=new Date();
-const time=d.toISOString().slice(2,16).replace(/[-T:]/g,"");
-const salt=Math.random().toString(36).substring(2,6).toUpperCase();
-return `HEL-${time}-${rarity}-${item}-${salt}`;
-}
-
-/* timer */
-function updateTimer(){
-const last=localStorage.getItem("crateTime");
-if(!last)return;
-const remaining=86400000-(Date.now()-last);
-if(remaining<=0){timer.textContent="✅ Crate Ready!";return;}
-let h=Math.floor(remaining/3600000);
-let m=Math.floor((remaining%3600000)/60000);
-let s=Math.floor((remaining%60000)/1000);
-timer.textContent=`Next crate in ${h}h ${m}m ${s}s`;
-}
-setInterval(updateTimer,1000);
-
-/* spin */
-function spinAnimation(callback){
-let items=loot.map(l=>l.item);
-let count=0;
-let spin=setInterval(()=>{
-spinner.textContent=items[Math.floor(Math.random()*items.length)];
-count++;
-if(count>20){clearInterval(spin);callback();}
-},100);
-}
-
-/* open crate */
-function openCrate(){
-const last=localStorage.getItem("crateTime");
-if(last && Date.now()-last<86400000){updateTimer();return;}
-spinAnimation(()=>{
-const reward=pickItem();
-const code=makeCode(reward.item,reward.rarity);
-lastCode=code;
-localStorage.setItem("crateTime",Date.now());
-
-let cls=
-reward.rarity==="Common"?"common":
-reward.rarity==="Uncommon"?"uncommon":
-reward.rarity==="Rare"?"rare":
-reward.rarity==="Ultra Rare"?"ultra":"legendary";
-
-crateResult.innerHTML=
-`🎉 You got: <span class="${cls}">${reward.item}</span>
-<br><br>Code:<br>${code}`;
-
-copyBtn.style.display="block";
-submitBtn.style.display="block";
-updateTimer();
-});
-}
-
-/* copy code */
-copyBtn.onclick=()=>{
-navigator.clipboard.writeText(lastCode);
-alert("Code copied!");
-};
-
-/* submit claim */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF_0sr790j2nhk_1lBc8EYRFuFQpKymO4T6OMUB--wy3bw_xQ5zMuMakyH114Q9HhN/exec";
-
-submitBtn.onclick = async () => {
-  const username = prompt("Enter your Minecraft username to claim:");
-  if(!username) return;
-
-  const rewardText = crateResult.textContent.match(/You got: (.+?)Code/);
-  if(!rewardText) return alert("Error detecting reward.");
-  const rewardItem = rewardText[1].trim();
-  const rarityMatch = lastCode.match(/HEL-\d{6}-([^-]+)-/);
-  const rewardRarity = rarityMatch ? rarityMatch[1] : "Unknown";
-
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        code: lastCode,
-        item: rewardItem,
-        rarity: rewardRarity,
-        player: username
-      })
-    });
-
-    const data = await res.json();
-    if(data.status === "duplicate"){
-      alert("❌ This code was already claimed!");
-    } else if(data.status === "success"){
-      alert("✅ Claim submitted! Staff will verify.");
-      submitBtn.style.display = "none";
-    } else {
-      alert("⚠ Something went wrong.");
-    }
-
-  } catch(err){
-    alert("⚠ Could not connect to the database.");
-  }
-};
-
-updateTimer();
-</script>
+<script src="app.js" defer></script>
 
 </body>
 </html>
