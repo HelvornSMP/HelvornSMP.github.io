@@ -226,6 +226,7 @@ footer{
 <div class="spinner" id="spinner"></div>
 <p id="crateResult"></p>
 <button class="copyBtn" id="copyBtn" style="display:none;">Copy Code</button>
+<button class="crateBtn" id="submitBtn" style="display:none;">Submit Claim</button>
 <p id="timer"></p>
 </div>
 
@@ -242,7 +243,7 @@ function updateStatus(){
 fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
 .then(r=>r.json())
 .then(data=>{
-status.textContent=data.online?"🟢 Running":"🔴 Sleeping";
+status.textContent=data.online?"🟢 Reachable":"🔴 Sleeping";
 });
 }
 updateStatus();
@@ -341,6 +342,7 @@ crateResult.innerHTML=
 <br><br>Code:<br>${code}`;
 
 copyBtn.style.display="block";
+submitBtn.style.display="block";
 updateTimer();
 });
 }
@@ -351,9 +353,50 @@ navigator.clipboard.writeText(lastCode);
 alert("Code copied!");
 };
 
+/* submit claim */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwzBQxqq4U2De5tbbEELIsQen5l4WHHiCVw_teaqYq9VVPXmYXpR_x9t5SfhbcmlMl/exec"; // <-- replace with your Apps Script URL
+
+submitBtn.onclick = async () => {
+  const username = prompt("Enter your Minecraft username to claim:");
+  if(!username) return;
+
+  // Extract item & rarity from lastCode
+  const rewardText = crateResult.textContent.match(/You got: (.+?)Code/);
+  if(!rewardText) return alert("Error detecting reward.");
+  const rewardItem = rewardText[1].trim();
+  const rarityMatch = lastCode.match(/HEL-\d{6}-([^-]+)-/);
+  const rewardRarity = rarityMatch ? rarityMatch[1] : "Unknown";
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        code: lastCode,
+        item: rewardItem,
+        rarity: rewardRarity,
+        player: username
+      })
+    });
+
+    const data = await res.json();
+    if(data.status === "duplicate"){
+      alert("❌ This code was already claimed!");
+    } else if(data.status === "success"){
+      alert("✅ Claim submitted! Staff will verify.");
+      submitBtn.style.display = "none";
+    } else {
+      alert("⚠ Something went wrong.");
+    }
+
+  } catch(err){
+    alert("⚠ Could not connect to the database.");
+  }
+};
+
 updateTimer();
 </script>
 
 </body>
 </html>
+
 
