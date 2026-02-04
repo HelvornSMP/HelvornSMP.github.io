@@ -7,128 +7,143 @@
 
 <style>
 :root{
---bg:#0b0b0b;
---card:#141414;
---accent:#c9b458;
---text:#eaeaea;
---muted:#a0a0a0;
+  --bg:#0b0b0b;
+  --card:#141414;
+  --accent:#c9b458;
+  --text:#eaeaea;
+  --muted:#a0a0a0;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
 
 body{
-background:radial-gradient(circle at top,#1a1a1a,var(--bg));
-color:var(--text);
-font-family:system-ui;
+  background:radial-gradient(circle at top,#1a1a1a,var(--bg));
+  color:var(--text);
+  font-family:system-ui;
 }
 
 header{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-padding:40px 20px;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px 20px;
 }
 
 .hero h1{
-font-size:clamp(3rem,8vw,5rem);
-color:var(--accent);
+  font-size:clamp(3rem,8vw,5rem);
+  color:var(--accent);
 }
 
 .hero p{color:var(--muted);margin:15px 0;}
 
 .buttons{
-display:flex;
-gap:15px;
-justify-content:center;
-flex-wrap:wrap;
+  display:flex;
+  gap:15px;
+  justify-content:center;
+  flex-wrap:wrap;
 }
 
 .btn{
-padding:14px 28px;
-border-radius:10px;
-font-weight:600;
-cursor:pointer;
-border:none;
+  padding:14px 28px;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+  border:none;
 }
 
 .primary{
-background:var(--accent);
-color:black;
+  background:var(--accent);
+  color:black;
 }
 
 .secondary{
-border:2px solid var(--accent);
-color:var(--accent);
-background:none;
+  border:2px solid var(--accent);
+  color:var(--accent);
+  background:none;
+}
+
+/* Admin button */
+.admin-btn{
+  margin-top:15px;
+  background:var(--accent);
+  color:black;
+  border:none;
+  padding:14px 28px;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+.admin-btn:hover{
+  transform:scale(1.05);
+  background:#ffd633;
 }
 
 section{
-padding:80px 20px;
-display:flex;
-justify-content:center;
+  padding:80px 20px;
+  display:flex;
+  justify-content:center;
 }
 
 .container{
-max-width:1100px;
-width:100%;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:20px;
+  max-width:1100px;
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
 }
 
 .card{
-background:linear-gradient(180deg,#191919,var(--card));
-border-radius:18px;
-padding:25px;
-box-shadow:0 10px 30px rgba(0,0,0,.4);
-text-align:center;
+  background:linear-gradient(180deg,#191919,var(--card));
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  text-align:center;
 }
 
 .card h2{color:var(--accent);margin-bottom:10px;}
-
 .card p,.card li{color:var(--muted);font-size:.95rem;}
-
 ul{padding-left:18px;text-align:left;}
 
 .ip-box{
-background:#0f0f0f;
-border:2px dashed var(--accent);
-padding:15px;
-border-radius:12px;
-margin-top:10px;
-font-family:monospace;
-color:var(--accent);
+  background:#0f0f0f;
+  border:2px dashed var(--accent);
+  padding:15px;
+  border-radius:12px;
+  margin-top:10px;
+  font-family:monospace;
+  color:var(--accent);
 }
 
 /* crate */
 .crateBtn{
-margin-top:15px;
-width:100%;
-padding:12px;
-font-weight:bold;
-background:var(--accent);
-color:black;
-border:none;
-border-radius:10px;
-cursor:pointer;
+  margin-top:15px;
+  width:100%;
+  padding:12px;
+  font-weight:bold;
+  background:var(--accent);
+  color:black;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
 }
 
 .copyBtn{
-margin-top:10px;
-width:100%;
-padding:10px;
-border-radius:10px;
-border:2px solid var(--accent);
-background:none;
-color:var(--accent);
-cursor:pointer;
+  margin-top:10px;
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:2px solid var(--accent);
+  background:none;
+  color:var(--accent);
+  cursor:pointer;
 }
 
 .spinner{
-height:22px;
-margin:10px 0;
+  height:22px;
+  margin:10px 0;
 }
 
 /* rarity colors */
@@ -139,10 +154,10 @@ margin:10px 0;
 .legendary{color:#ffaa00;}
 
 footer{
-text-align:center;
-padding:30px;
-color:var(--muted);
-border-top:1px solid #222;
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+  border-top:1px solid #222;
 }
 </style>
 </head>
@@ -159,6 +174,9 @@ border-top:1px solid #222;
 <a class="btn secondary" href="https://discord.gg/4H3Cgj77DH" target="_blank">Discord</a>
 </div>
 
+<!-- Admin button -->
+<a href="admin.html"><button class="admin-btn">🛡 Admin Panel</button></a>
+
 <div style="margin-top:30px;">
 <strong>Server Status:</strong>
 <div id="status" style="margin-top:10px;color:var(--accent)">Checking…</div>
@@ -172,7 +190,6 @@ border-top:1px solid #222;
 
 <div class="card">
 <h2>Server Info</h2>
-
 <p>Pure anarchy survival. Griefing allowed. No hacking.</p>
 
 <div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
@@ -205,15 +222,10 @@ border-top:1px solid #222;
 <!-- CRATE CARD -->
 <div class="card">
 <h2>🎁 Daily Crate</h2>
-
 <button class="crateBtn" onclick="openCrate()">Open Crate</button>
-
 <div class="spinner" id="spinner"></div>
-
 <p id="crateResult"></p>
-
 <button class="copyBtn" id="copyBtn" style="display:none;">Copy Code</button>
-
 <p id="timer"></p>
 </div>
 
@@ -225,7 +237,6 @@ border-top:1px solid #222;
 </footer>
 
 <script>
-
 /* server status */
 function updateStatus(){
 fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
@@ -288,16 +299,11 @@ const last=localStorage.getItem("crateTime");
 if(!last)return;
 
 const remaining=86400000-(Date.now()-last);
-
-if(remaining<=0){
-timer.textContent="✅ Crate Ready!";
-return;
-}
+if(remaining<=0){timer.textContent="✅ Crate Ready!";return;}
 
 let h=Math.floor(remaining/3600000);
 let m=Math.floor((remaining%3600000)/60000);
 let s=Math.floor((remaining%60000)/1000);
-
 timer.textContent=`Next crate in ${h}h ${m}m ${s}s`;
 }
 setInterval(updateTimer,1000);
@@ -306,33 +312,21 @@ setInterval(updateTimer,1000);
 function spinAnimation(callback){
 let items=loot.map(l=>l.item);
 let count=0;
-
 let spin=setInterval(()=>{
 spinner.textContent=items[Math.floor(Math.random()*items.length)];
 count++;
-
-if(count>20){
-clearInterval(spin);
-callback();
-}
-
+if(count>20){clearInterval(spin);callback();}
 },100);
 }
 
 /* open crate */
 function openCrate(){
 const last=localStorage.getItem("crateTime");
-
-if(last && Date.now()-last<86400000){
-updateTimer();
-return;
-}
+if(last && Date.now()-last<86400000){updateTimer();return;}
 
 spinAnimation(()=>{
-
 const reward=pickItem();
 const code=makeCode(reward.item,reward.rarity);
-
 lastCode=code;
 localStorage.setItem("crateTime",Date.now());
 
@@ -358,8 +352,8 @@ alert("Code copied!");
 };
 
 updateTimer();
-
 </script>
 
 </body>
 </html>
+
