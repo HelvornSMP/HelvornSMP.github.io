@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Helvorn Admin Checker</title>
+<style>
+body{
+background:#111;
+color:white;
+font-family:system-ui;
+text-align:center;
+padding:50px;
+}
+
+input{
+padding:12px;
+width:300px;
+border-radius:8px;
+border:none;
+}
+
+button{
+padding:12px 20px;
+margin-left:10px;
+border:none;
+border-radius:8px;
+background:gold;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🛡 Code Verification</h1>
+
+<input id="codeInput" placeholder="Paste crate code">
+<button onclick="verify()">Verify</button>
+
+<p id="result"></p>
+
+<script>
+
+function verify(){
+
+let code=document.getElementById("codeInput").value;
+
+if(!code.startsWith("HEL-")){
+result.textContent="❌ Invalid Helvorn Code";
+return;
+}
+
+let parts=code.split("-");
+
+if(parts.length<5){
+result.textContent="❌ Broken Code Format";
+return;
+}
+
+result.innerHTML=
+`✅ Valid Code<br>
+Time: ${parts[1]}<br>
+Rarity: ${parts[2]}<br>
+Item: ${parts[3]}`;
+
+}
+
+</script>
+
+</body>
+</html>
