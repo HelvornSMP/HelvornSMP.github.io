@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HelvornSMP</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HelvornSMP • Anarchy Survival</title>
 
 <style>
 :root{
@@ -14,17 +14,65 @@
 --muted:#a0a0a0;
 }
 
+*{box-sizing:border-box;margin:0;padding:0;}
+
 body{
 background:radial-gradient(circle at top,#1a1a1a,var(--bg));
 color:var(--text);
 font-family:system-ui;
-margin:0;
+}
+
+header{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:40px 20px;
+}
+
+.hero h1{
+font-size:clamp(3rem,8vw,5rem);
+color:var(--accent);
+}
+
+.hero p{color:var(--muted);margin:15px 0;}
+
+.buttons{
+display:flex;
+gap:15px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.btn{
+padding:14px 28px;
+border-radius:10px;
+font-weight:600;
+cursor:pointer;
+border:none;
+}
+
+.primary{
+background:var(--accent);
+color:black;
+}
+
+.secondary{
+border:2px solid var(--accent);
+color:var(--accent);
+background:none;
+}
+
+section{
+padding:80px 20px;
+display:flex;
+justify-content:center;
 }
 
 .container{
 max-width:1100px;
-margin:auto;
-padding:40px 20px;
+width:100%;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:20px;
@@ -34,50 +82,127 @@ gap:20px;
 background:linear-gradient(180deg,#191919,var(--card));
 border-radius:18px;
 padding:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.4);
 text-align:center;
 }
 
-button{
-padding:12px;
-border-radius:10px;
-border:none;
-cursor:pointer;
-font-weight:bold;
+.card h2{color:var(--accent);margin-bottom:10px;}
+
+.card p,.card li{color:var(--muted);font-size:.95rem;}
+
+ul{padding-left:18px;text-align:left;}
+
+.ip-box{
+background:#0f0f0f;
+border:2px dashed var(--accent);
+padding:15px;
+border-radius:12px;
+margin-top:10px;
+font-family:monospace;
+color:var(--accent);
 }
 
+/* crate */
 .crateBtn{
+margin-top:15px;
+width:100%;
+padding:12px;
+font-weight:bold;
 background:var(--accent);
 color:black;
-width:100%;
+border:none;
+border-radius:10px;
+cursor:pointer;
 }
 
 .copyBtn{
 margin-top:10px;
-background:none;
-border:2px solid var(--accent);
-color:var(--accent);
 width:100%;
+padding:10px;
+border-radius:10px;
+border:2px solid var(--accent);
+background:none;
+color:var(--accent);
+cursor:pointer;
 }
 
 .spinner{
-font-size:18px;
-margin:15px 0;
-height:24px;
+height:22px;
+margin:10px 0;
 }
 
+/* rarity colors */
 .common{color:#bbb;}
 .uncommon{color:#55ff55;}
 .rare{color:#55ffff;}
 .ultra{color:#ff55ff;}
 .legendary{color:#ffaa00;}
 
+footer{
+text-align:center;
+padding:30px;
+color:var(--muted);
+border-top:1px solid #222;
+}
 </style>
 </head>
 
 <body>
 
+<header>
+<div class="hero">
+<h1>HELVORNSMP</h1>
+<p>Java & Bedrock • Anarchy Survival • No Hacks</p>
+
+<div class="buttons">
+<a class="btn primary" href="#join">Join Server</a>
+<a class="btn secondary" href="https://discord.gg/4H3Cgj77DH" target="_blank">Discord</a>
+</div>
+
+<div style="margin-top:30px;">
+<strong>Server Status:</strong>
+<div id="status" style="margin-top:10px;color:var(--accent)">Checking…</div>
+</div>
+
+</div>
+</header>
+
+<section id="join">
 <div class="container">
 
+<div class="card">
+<h2>Server Info</h2>
+
+<p>Pure anarchy survival. Griefing allowed. No hacking.</p>
+
+<div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
+<button class="btn secondary" onclick="copyIP('java-ip')">Copy Java IP</button>
+
+<div class="ip-box" style="margin-top:15px;">Bedrock: <span id="bedrock-ip">helvornsmp.playserver.pro:35098</span></div>
+<button class="btn secondary" onclick="copyIP('bedrock-ip')">Copy Bedrock</button>
+</div>
+
+<div class="card">
+<h2>Why Helvorn?</h2>
+<ul>
+<li>Java + Bedrock Crossplay</li>
+<li>Cracked Support</li>
+<li>Active Admins</li>
+<li>True Anarchy</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>How To Start Server</h2>
+<ul>
+<li>Try joining</li>
+<li>Cancel connection</li>
+<li>Wait for server to wake</li>
+<li>Join again</li>
+</ul>
+</div>
+
+<!-- CRATE CARD -->
 <div class="card">
 <h2>🎁 Daily Crate</h2>
 
@@ -89,15 +214,36 @@ height:24px;
 
 <button class="copyBtn" id="copyBtn" style="display:none;">Copy Code</button>
 
-<p id="timer" style="margin-top:10px;color:#aaa;"></p>
-
+<p id="timer"></p>
 </div>
 
 </div>
+</section>
+
+<footer>
+© 2026 HelvornSMP
+</footer>
 
 <script>
 
-// ===== LOOT TABLE =====
+/* server status */
+function updateStatus(){
+fetch("https://api.mcsrvstat.us/2/helvornsmp.playserver.pro")
+.then(r=>r.json())
+.then(data=>{
+status.textContent=data.online?"🟢 Running":"🔴 Sleeping";
+});
+}
+updateStatus();
+setInterval(updateStatus,30000);
+
+/* copy ip */
+function copyIP(id){
+navigator.clipboard.writeText(document.getElementById(id).textContent);
+alert("Copied!");
+}
+
+/* loot */
 const loot=[
 {item:"Diamond x6",rarity:"Uncommon"},
 {item:"Totem of Undying",rarity:"Rare"},
@@ -119,7 +265,7 @@ const weights={
 
 let lastCode="";
 
-// ===== WEIGHTED PICK =====
+/* weighted pick */
 function pickItem(){
 let list=[];
 loot.forEach(i=>{
@@ -128,7 +274,7 @@ for(let x=0;x<weights[i.rarity];x++) list.push(i);
 return list[Math.floor(Math.random()*list.length)];
 }
 
-// ===== CODE GEN =====
+/* code gen */
 function makeCode(item,rarity){
 const d=new Date();
 const time=d.toISOString().slice(2,16).replace(/[-T:]/g,"");
@@ -136,15 +282,15 @@ const salt=Math.random().toString(36).substring(2,6).toUpperCase();
 return `HEL-${time}-${rarity}-${item}-${salt}`;
 }
 
-// ===== TIMER =====
+/* timer */
 function updateTimer(){
 const last=localStorage.getItem("crateTime");
-if(!last) return;
+if(!last)return;
 
 const remaining=86400000-(Date.now()-last);
 
 if(remaining<=0){
-document.getElementById("timer").textContent="✅ Crate Ready!";
+timer.textContent="✅ Crate Ready!";
 return;
 }
 
@@ -152,36 +298,31 @@ let h=Math.floor(remaining/3600000);
 let m=Math.floor((remaining%3600000)/60000);
 let s=Math.floor((remaining%60000)/1000);
 
-document.getElementById("timer").textContent=
-`Next crate in ${h}h ${m}m ${s}s`;
+timer.textContent=`Next crate in ${h}h ${m}m ${s}s`;
 }
-
 setInterval(updateTimer,1000);
 
-// ===== SPIN ANIMATION =====
+/* spin */
 function spinAnimation(callback){
-
-const spin=document.getElementById("spinner");
-
 let items=loot.map(l=>l.item);
-let i=0;
+let count=0;
 
-const interval=setInterval(()=>{
-spin.textContent=items[Math.floor(Math.random()*items.length)];
-i++;
+let spin=setInterval(()=>{
+spinner.textContent=items[Math.floor(Math.random()*items.length)];
+count++;
 
-if(i>20){
-clearInterval(interval);
+if(count>20){
+clearInterval(spin);
 callback();
 }
 
 },100);
 }
 
-// ===== OPEN CRATE =====
+/* open crate */
 function openCrate(){
-
 const last=localStorage.getItem("crateTime");
+
 if(last && Date.now()-last<86400000){
 updateTimer();
 return;
@@ -193,27 +334,25 @@ const reward=pickItem();
 const code=makeCode(reward.item,reward.rarity);
 
 lastCode=code;
-
 localStorage.setItem("crateTime",Date.now());
 
-let rarityClass=
+let cls=
 reward.rarity==="Common"?"common":
 reward.rarity==="Uncommon"?"uncommon":
 reward.rarity==="Rare"?"rare":
 reward.rarity==="Ultra Rare"?"ultra":"legendary";
 
-document.getElementById("crateResult").innerHTML=
-`🎉 You got: <span class="${rarityClass}">${reward.item}</span>
+crateResult.innerHTML=
+`🎉 You got: <span class="${cls}">${reward.item}</span>
 <br><br>Code:<br>${code}`;
 
-document.getElementById("copyBtn").style.display="block";
+copyBtn.style.display="block";
 updateTimer();
-
 });
 }
 
-// ===== COPY BUTTON =====
-document.getElementById("copyBtn").onclick=()=>{
+/* copy code */
+copyBtn.onclick=()=>{
 navigator.clipboard.writeText(lastCode);
 alert("Code copied!");
 };
