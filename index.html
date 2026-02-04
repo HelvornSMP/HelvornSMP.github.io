@@ -159,6 +159,12 @@ footer{
   color:var(--muted);
   border-top:1px solid #222;
 }
+
+/* About Me Card */
+#aboutMeCard p {
+  line-height:1.5;
+  text-align:left;
+}
 </style>
 </head>
 
@@ -230,6 +236,17 @@ footer{
 <p id="timer"></p>
 </div>
 
+<!-- ABOUT ME CARD -->
+<div class="card" id="aboutMeCard">
+<h2>About Me</h2>
+<p>
+I am a coder and developer with a passion for creating and building things that people enjoy.
+I love entertaining others and sharing knowledge to help others pursue their goals and accomplish tasks in life.
+I enjoy learning new technologies, exploring creative ideas, and turning them into real projects.
+Above all, I strive to be kind, supportive, and encouraging to everyone I meet, whether online or in real life.
+</p>
+</div>
+
 </div>
 </section>
 
@@ -298,10 +315,8 @@ return `HEL-${time}-${rarity}-${item}-${salt}`;
 function updateTimer(){
 const last=localStorage.getItem("crateTime");
 if(!last)return;
-
 const remaining=86400000-(Date.now()-last);
 if(remaining<=0){timer.textContent="✅ Crate Ready!";return;}
-
 let h=Math.floor(remaining/3600000);
 let m=Math.floor((remaining%3600000)/60000);
 let s=Math.floor((remaining%60000)/1000);
@@ -324,7 +339,6 @@ if(count>20){clearInterval(spin);callback();}
 function openCrate(){
 const last=localStorage.getItem("crateTime");
 if(last && Date.now()-last<86400000){updateTimer();return;}
-
 spinAnimation(()=>{
 const reward=pickItem();
 const code=makeCode(reward.item,reward.rarity);
@@ -354,13 +368,12 @@ alert("Code copied!");
 };
 
 /* submit claim */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF_0sr790j2nhk_1lBc8EYRFuFQpKymO4T6OMUB--wy3bw_xQ5zMuMakyH114Q9HhN/exec"; // <-- replace with your Apps Script URL
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF_0sr790j2nhk_1lBc8EYRFuFQpKymO4T6OMUB--wy3bw_xQ5zMuMakyH114Q9HhN/exec";
 
 submitBtn.onclick = async () => {
   const username = prompt("Enter your Minecraft username to claim:");
   if(!username) return;
 
-  // Extract item & rarity from lastCode
   const rewardText = crateResult.textContent.match(/You got: (.+?)Code/);
   if(!rewardText) return alert("Error detecting reward.");
   const rewardItem = rewardText[1].trim();
@@ -398,5 +411,6 @@ updateTimer();
 
 </body>
 </html>
+
 
 
