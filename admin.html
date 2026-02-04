@@ -1,68 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Helvorn Admin Checker</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helvorn Admin Crate Checker</title>
+
 <style>
 body{
-background:#111;
-color:white;
+background:#0b0b0b;
+color:#eaeaea;
 font-family:system-ui;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.card{
+background:#141414;
+padding:40px;
+border-radius:18px;
+width:420px;
+box-shadow:0 10px 40px rgba(0,0,0,.5);
 text-align:center;
-padding:50px;
+}
+
+h1{
+color:#c9b458;
+margin-bottom:20px;
 }
 
 input{
-padding:12px;
-width:300px;
-border-radius:8px;
+width:100%;
+padding:14px;
+border-radius:10px;
 border:none;
+margin-bottom:15px;
+font-size:16px;
+background:#0f0f0f;
+color:white;
 }
 
 button{
-padding:12px 20px;
-margin-left:10px;
+width:100%;
+padding:14px;
+border-radius:10px;
 border:none;
-border-radius:8px;
-background:gold;
+background:#c9b458;
+color:black;
 font-weight:bold;
 cursor:pointer;
 }
+
+#result{
+margin-top:20px;
+font-size:15px;
+line-height:1.6;
+}
+
+.valid{color:#55ff55;}
+.invalid{color:#ff5555;}
+.info{color:#55ffff;}
 
 </style>
 </head>
 
 <body>
 
-<h1>🛡 Code Verification</h1>
+<div class="card">
 
-<input id="codeInput" placeholder="Paste crate code">
-<button onclick="verify()">Verify</button>
+<h1>🛡 Crate Code Checker</h1>
 
-<p id="result"></p>
+<input id="codeInput" placeholder="Paste crate code here">
+
+<button onclick="verifyCode()">Verify Code</button>
+
+<div id="result"></div>
+
+</div>
 
 <script>
 
-function verify(){
+// 🔴 PASTE YOUR GOOGLE SCRIPT URL HERE
+const SCRIPT_URL = "PASTE_YOUR_SCRIPT_URL_HERE";
 
-let code=document.getElementById("codeInput").value;
+async function verifyCode(){
 
+const code = document.getElementById("codeInput").value.trim();
+const result = document.getElementById("result");
+
+// ===== Basic format validation =====
 if(!code.startsWith("HEL-")){
-result.textContent="❌ Invalid Helvorn Code";
+result.innerHTML = `<span class="invalid">❌ Invalid Helvorn code format</span>`;
 return;
 }
 
-let parts=code.split("-");
+const parts = code.split("-");
 
-if(parts.length<5){
-result.textContent="❌ Broken Code Format";
+if(parts.length < 5){
+result.innerHTML = `<span class="invalid">❌ Broken code format</span>`;
 return;
 }
 
-result.innerHTML=
-`✅ Valid Code<br>
-Time: ${parts[1]}<br>
-Rarity: ${parts[2]}<br>
-Item: ${parts[3]}`;
+// ===== Extract info from code =====
+const time = parts[1];
+const rarity = parts[2];
+const item = parts[3];
+
+// ===== Check Google Sheet =====
+try{
+
+const res = await fetch(SCRIPT_URL + "?check=" + encodeURIComponent(code));
+const data = await res.json();
+
+if(data.status === "claimed"){
+
+result.innerHTML = `
+<span class="invalid">⚠ Code Already Claimed</span><br><br>
+<span class="info">Item:</span> ${data.item}<br>
+<span class="info">Rarity:</span> ${data.rarity}<br>
+<span class="info">Player:</span> ${data.player}<br>
+<span class="info">Time:</span> ${data.timestamp}
+`;
+
+}else{
+
+result.innerHTML = `
+<span class="valid">✅ Code Valid & Unclaimed</span><br><br>
+<span class="info">Item:</span> ${item}<br>
+<span class="info">Rarity:</span> ${rarity}<br>
+<span class="info">Generated:</span> ${time}
+`;
+
+}
+
+}catch(err){
+result.innerHTML = `<span class="invalid">❌ Database connection failed</span>`;
+}
 
 }
 
@@ -70,3 +145,4 @@ Item: ${parts[3]}`;
 
 </body>
 </html>
+
