@@ -482,6 +482,8 @@ function copyIP(elementId){
 /* ============================================
    DAILY CRATE SYSTEM
    ============================================ */
+const ADMIN_BYPASS_CODE = "HelvornSMP2025"; // Same as admin panel password
+
 const rewards = [
   {name:'Common Crate Key',rarity:'common',class:'common'},
   {name:'Uncommon Crate Key',rarity:'uncommon',class:'uncommon'},
@@ -492,17 +494,43 @@ const rewards = [
 
 let generatedCode = '';
 
-function openCrate(){
-  const lastOpen = localStorage.getItem('lastCrateOpen');
-  const now = Date.now();
-  
-  if(lastOpen && (now - lastOpen) < 86400000){
-    const timeLeft = 86400000 - (now - lastOpen);
-    const hours = Math.floor(timeLeft / 3600000);
-    const minutes = Math.floor((timeLeft % 3600000) / 60000);
-    document.getElementById('crateResult').innerHTML = `⏳ Come back in ${hours}h ${minutes}m`;
-    return;
+// Check if user is admin (no timer)
+function isAdmin(){
+  return localStorage.getItem('adminBypass') === ADMIN_BYPASS_CODE;
+}
+
+// Admin bypass toggle (hidden feature)
+window.enableAdminMode = function(code){
+  if(code === ADMIN_BYPASS_CODE){
+    localStorage.setItem('adminBypass', code);
+    console.log('Admin mode enabled - No crate timer');
+    updateTimer();
+    return true;
   }
+  return false;
+}
+
+window.disableAdminMode = function(){
+  localStorage.removeItem('adminBypass');
+  console.log('Admin mode disabled');
+  updateTimer();
+}
+
+function openCrate(){
+  // Skip timer check if admin
+  if(!isAdmin()){
+    const lastOpen = localStorage.getItem('lastCrateOpen');
+    const now = Date.now();
+    
+    if(lastOpen && (now - lastOpen) < 86400000){
+      const timeLeft = 86400000 - (now - lastOpen);
+      const hours = Math.floor(timeLeft / 3600000);
+      const minutes = Math.floor((timeLeft % 3600000) / 60000);
+      document.getElementById('crateResult').innerHTML = `⏳ Come back in ${hours}h ${minutes}m`;
+      return;
+    }
+  }
+  
   
   const spinner = document.getElementById('spinner');
   spinner.innerHTML = '🎁 Opening...';
@@ -536,7 +564,10 @@ function openCrate(){
     document.getElementById('submitBtn').style.display = 'block';
     spinner.innerHTML = '';
     
-    localStorage.setItem('lastCrateOpen', now.toString());
+    // Only set timer if not admin
+    if(!isAdmin()){
+      localStorage.setItem('lastCrateOpen', Date.now().toString());
+    }
     updateTimer();
   }, 2000);
 }
@@ -579,6 +610,13 @@ function submitClaim(){
 function updateTimer(){
   const lastOpen = localStorage.getItem('lastCrateOpen');
   const timerDiv = document.getElementById('timer');
+  
+  // Show admin status if enabled
+  if(isAdmin()){
+    timerDiv.innerHTML = '👑 Admin Mode: No Timer';
+    timerDiv.style.color = 'var(--accent)';
+    return;
+  }
   
   if(!lastOpen){
     timerDiv.innerHTML = 'Open your first crate!';
