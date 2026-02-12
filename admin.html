@@ -342,6 +342,13 @@ button:hover{
   <a href="index.html" class="back-btn">← Back to Site</a>
   
   <h1>🛡 Admin Panel</h1>
+  
+  <!-- Backup/Export Section -->
+  <div style="text-align:center;margin-bottom:20px;">
+    <button onclick="exportCodes()" style="margin-right:10px;background:#333;color:white;">💾 Export Codes</button>
+    <button onclick="document.getElementById('importFile').click()" style="background:#333;color:white;">📁 Import Codes</button>
+    <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importCodes(event)" />
+  </div>
 
   <!-- Stats -->
   <div class="stats">
@@ -469,10 +476,10 @@ button:hover{
 <div id="claimModal" class="claim-modal">
   <div class="modal-content">
     <h3>Mark Code as Claimed</h3>
-    <input type="text" id="usernameInput" placeholder="Enter player username" />
+    <input type="text" id="usernameInput" placeholder="Enter player username" onkeypress="if(event.key==='Enter')confirmClaim()" />
     <div class="modal-actions">
-      <button onclick="closeClaimModal()">Cancel</button>
-      <button onclick="confirmClaim()" class="btn-small claim">Confirm</button>
+      <button onclick="closeClaimModal()" style="background:#333;color:white;">Cancel</button>
+      <button onclick="confirmClaim()" style="background:var(--accent);color:black;">Confirm</button>
     </div>
   </div>
 </div>
@@ -508,6 +515,24 @@ window.addEventListener('DOMContentLoaded', function(){
       checkPassword();
     }
   });
+  
+  // Check if codes exist and show backup reminder
+  const codes = localStorage.getItem('crateCodes');
+  if(codes){
+    const codesArray = JSON.parse(codes);
+    const lastBackup = localStorage.getItem('lastBackup');
+    const now = Date.now();
+    
+    // Remind to backup every 7 days
+    if(!lastBackup || (now - parseInt(lastBackup)) > 604800000){
+      setTimeout(() => {
+        if(confirm(`⚠️ You have ${codesArray.length} codes stored.\n\nIt's been a while since your last backup. Would you like to export them now to prevent data loss?`)){
+          exportCodes();
+          localStorage.setItem('lastBackup', now.toString());
+        }
+      }, 2000);
+    }
+  }
 });
 
 let currentClaimCode = null;
@@ -822,6 +847,70 @@ function deleteCode(code){
 
 // Load codes on page load
 loadCodes();
+
+// Export codes to JSON file
+function exportCodes(){
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  if(codesArray.length === 0){
+    alert('No codes to export');
+    return;
+  }
+  
+  const dataStr = JSON.stringify(codesArray, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `helvorn-codes-backup-${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  // Mark backup time
+  localStorage.setItem('lastBackup', Date.now().toString());
+  
+  alert(`✅ Exported ${codesArray.length} codes successfully!\n\nSave this file somewhere safe (Google Drive, USB, etc.)`);
+}
+
+// Import codes from JSON file
+function importCodes(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const importedCodes = JSON.parse(e.target.result);
+      
+      if(!Array.isArray(importedCodes)){
+        alert('Invalid file format');
+        return;
+      }
+      
+      // Merge with existing codes (avoid duplicates)
+      const existingCodes = localStorage.getItem('crateCodes');
+      const existingArray = existingCodes ? JSON.parse(existingCodes) : [];
+      
+      let addedCount = 0;
+      importedCodes.forEach(importedCode => {
+        const exists = existingArray.find(c => c.code === importedCode.code);
+        if(!exists){
+          existingArray.push(importedCode);
+          addedCount++;
+        }
+      });
+      
+      localStorage.setItem('crateCodes', JSON.stringify(existingArray));
+      loadCodes();
+      
+      alert(`Imported ${addedCount} new codes (${importedCodes.length - addedCount} duplicates skipped)`);
+    } catch(err){
+      alert('Error reading file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
 </script>
 
 </body>
