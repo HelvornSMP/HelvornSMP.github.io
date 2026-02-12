@@ -517,7 +517,14 @@ function openCrate(){
     else if(roll < 0.98) reward = rewards[3];
     else reward = rewards[4];
     
-    generatedCode = 'HC-' + Math.random().toString(36).substring(2,10).toUpperCase();
+    // NEW FORMAT: ITEM-NAME-XXXX (e.g., COMMON-A3F9, LEGENDARY-K7M2)
+    const itemName = reward.name.replace(/ Crate Key$/i, '').replace(/\s+/g, '-').toUpperCase();
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let randomCode = '';
+    for(let i = 0; i < 4; i++){
+      randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    generatedCode = `${itemName}-${randomCode}`;
     
     // Save code to localStorage for admin panel
     saveCodeToAdmin(generatedCode, reward);
@@ -545,9 +552,9 @@ function saveCodeToAdmin(code, reward){
     reward: reward.name,
     rarity: reward.rarity,
     timestamp: new Date().toISOString(),
-    status: 'pending',
+    status: 'unclaimed',
     username: null,
-    usedAt: null
+    claimedAt: null
   });
   
   // Save back to localStorage
