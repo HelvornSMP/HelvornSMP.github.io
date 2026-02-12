@@ -365,7 +365,68 @@ button:hover{
     <p style="color:var(--muted);margin-bottom:15px;">When a player gives you a code, add it here first. Then you can check it anytime to see if they've already claimed it.</p>
     <div class="input-group">
       <input type="text" id="manualCodeInput" placeholder="Enter code (e.g., DIAMOND-A3F9)" />
-      <input type="text" id="manualItemInput" placeholder="Item name (e.g., Diamond Sword)" style="flex:0.8;" />
+      <select id="manualItemSelect" style="padding:14px;border-radius:10px;border:2px solid #222;background:#0f0f0f;color:white;font-size:16px;flex:1;">
+        <option value="">-- Select Item --</option>
+        <optgroup label="Crate Keys">
+          <option value="Common Crate Key">Common Crate Key</option>
+          <option value="Uncommon Crate Key">Uncommon Crate Key</option>
+          <option value="Rare Crate Key">Rare Crate Key</option>
+          <option value="Ultra Crate Key">Ultra Crate Key</option>
+          <option value="Legendary Crate Key">Legendary Crate Key</option>
+        </optgroup>
+        <optgroup label="Weapons">
+          <option value="Diamond Sword">Diamond Sword</option>
+          <option value="Netherite Sword">Netherite Sword</option>
+          <option value="Diamond Axe">Diamond Axe</option>
+          <option value="Netherite Axe">Netherite Axe</option>
+          <option value="Trident">Trident</option>
+          <option value="Bow">Bow</option>
+          <option value="Crossbow">Crossbow</option>
+        </optgroup>
+        <optgroup label="Armor">
+          <option value="Diamond Helmet">Diamond Helmet</option>
+          <option value="Diamond Chestplate">Diamond Chestplate</option>
+          <option value="Diamond Leggings">Diamond Leggings</option>
+          <option value="Diamond Boots">Diamond Boots</option>
+          <option value="Netherite Helmet">Netherite Helmet</option>
+          <option value="Netherite Chestplate">Netherite Chestplate</option>
+          <option value="Netherite Leggings">Netherite Leggings</option>
+          <option value="Netherite Boots">Netherite Boots</option>
+          <option value="Elytra">Elytra</option>
+        </optgroup>
+        <optgroup label="Tools">
+          <option value="Diamond Pickaxe">Diamond Pickaxe</option>
+          <option value="Netherite Pickaxe">Netherite Pickaxe</option>
+          <option value="Diamond Shovel">Diamond Shovel</option>
+          <option value="Netherite Shovel">Netherite Shovel</option>
+          <option value="Diamond Hoe">Diamond Hoe</option>
+          <option value="Netherite Hoe">Netherite Hoe</option>
+        </optgroup>
+        <optgroup label="Resources">
+          <option value="Diamond">Diamond</option>
+          <option value="Netherite Ingot">Netherite Ingot</option>
+          <option value="Ancient Debris">Ancient Debris</option>
+          <option value="Emerald">Emerald</option>
+          <option value="Enchanted Golden Apple">Enchanted Golden Apple</option>
+          <option value="Totem of Undying">Totem of Undying</option>
+          <option value="Nether Star">Nether Star</option>
+          <option value="Dragon Egg">Dragon Egg</option>
+        </optgroup>
+        <optgroup label="Blocks">
+          <option value="Shulker Box">Shulker Box</option>
+          <option value="Ender Chest">Ender Chest</option>
+          <option value="Beacon">Beacon</option>
+          <option value="Conduit">Conduit</option>
+        </optgroup>
+        <optgroup label="Special Items">
+          <option value="Mending Book">Mending Book</option>
+          <option value="Fortune III Book">Fortune III Book</option>
+          <option value="Silk Touch Book">Silk Touch Book</option>
+          <option value="Sharpness V Book">Sharpness V Book</option>
+          <option value="Protection IV Book">Protection IV Book</option>
+          <option value="Unbreaking III Book">Unbreaking III Book</option>
+        </optgroup>
+      </select>
       <select id="manualRaritySelect" style="padding:14px;border-radius:10px;border:2px solid #222;background:#0f0f0f;color:white;font-size:16px;flex:0.6;">
         <option value="common">Common</option>
         <option value="uncommon">Uncommon</option>
@@ -454,18 +515,26 @@ let currentClaimCode = null;
 // Add code manually to database
 function addManualCode(){
   const code = document.getElementById('manualCodeInput').value.trim().toUpperCase();
-  const itemName = document.getElementById('manualItemInput').value.trim();
+  const itemName = document.getElementById('manualItemSelect').value;
   const rarity = document.getElementById('manualRaritySelect').value;
   const resultBox = document.getElementById('manualCodeResult');
   
+  // Validate code format
   if(!code){
     resultBox.innerHTML = '<p style="color:#ff5555;">Please enter a code</p>';
     resultBox.classList.add('show');
     return;
   }
   
+  // Check code format (should be ITEM-XXXX or similar)
+  if(!code.includes('-') || code.length < 3){
+    resultBox.innerHTML = '<p style="color:#ff5555;">Invalid code format. Codes should look like: DIAMOND-A3F9</p>';
+    resultBox.classList.add('show');
+    return;
+  }
+  
   if(!itemName){
-    resultBox.innerHTML = '<p style="color:#ff5555;">Please enter an item name</p>';
+    resultBox.innerHTML = '<p style="color:#ff5555;">Please select an item from the dropdown</p>';
     resultBox.classList.add('show');
     return;
   }
@@ -524,7 +593,7 @@ function addManualCode(){
   
   // Clear inputs
   document.getElementById('manualCodeInput').value = '';
-  document.getElementById('manualItemInput').value = '';
+  document.getElementById('manualItemSelect').value = '';
   
   // Reload code list
   loadCodes();
