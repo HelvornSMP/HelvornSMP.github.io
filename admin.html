@@ -3,144 +3,756 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Helvorn Admin Crate Checker</title>
-
+<title>Helvorn Admin Panel</title>
 <style>
-body{
-background:#0b0b0b;
-color:#eaeaea;
-font-family:system-ui;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
+:root{
+  --bg:#0b0b0b;
+  --card:#141414;
+  --accent:#c9b458;
+  --text:#eaeaea;
+  --muted:#a0a0a0;
 }
 
-.card{
-background:#141414;
-padding:40px;
-border-radius:18px;
-width:420px;
-box-shadow:0 10px 40px rgba(0,0,0,.5);
-text-align:center;
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui;
+  padding:20px;
+  min-height:100vh;
+}
+
+.container{
+  max-width:900px;
+  margin:0 auto;
 }
 
 h1{
-color:#c9b458;
-margin-bottom:20px;
+  color:var(--accent);
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.lookup-section{
+  background:var(--card);
+  padding:30px;
+  border-radius:18px;
+  margin-bottom:30px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+}
+
+.lookup-section h2{
+  color:var(--accent);
+  margin-bottom:20px;
+  font-size:1.3rem;
+}
+
+.input-group{
+  display:flex;
+  gap:10px;
+  margin-bottom:15px;
 }
 
 input{
-width:100%;
-padding:14px;
-border-radius:10px;
-border:none;
-margin-bottom:15px;
-font-size:16px;
-background:#0f0f0f;
-color:white;
+  flex:1;
+  padding:14px;
+  border-radius:10px;
+  border:2px solid #222;
+  background:#0f0f0f;
+  color:white;
+  font-size:16px;
+}
+
+input:focus{
+  outline:none;
+  border-color:var(--accent);
 }
 
 button{
-width:100%;
-padding:14px;
-border-radius:10px;
-border:none;
-background:#c9b458;
-color:black;
-font-weight:bold;
-cursor:pointer;
+  padding:14px 28px;
+  border-radius:10px;
+  border:none;
+  background:var(--accent);
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
 }
 
-#result{
-margin-top:20px;
-font-size:15px;
-line-height:1.6;
+button:hover{
+  transform:scale(1.05);
 }
 
-.valid{color:#55ff55;}
-.invalid{color:#ff5555;}
-.info{color:#55ffff;}
+.result-box{
+  background:#0f0f0f;
+  padding:20px;
+  border-radius:10px;
+  margin-top:15px;
+  border-left:4px solid var(--accent);
+  display:none;
+}
 
+.result-box.show{
+  display:block;
+}
+
+.status{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:6px;
+  font-weight:bold;
+  font-size:0.9rem;
+  margin-bottom:10px;
+}
+
+.status.unclaimed{
+  background:#55ff55;
+  color:black;
+}
+
+.status.claimed{
+  background:#ff5555;
+  color:white;
+}
+
+.info-row{
+  margin:8px 0;
+  display:flex;
+  gap:10px;
+}
+
+.info-label{
+  color:var(--muted);
+  min-width:120px;
+}
+
+.info-value{
+  color:var(--text);
+  font-weight:600;
+}
+
+.all-codes-section{
+  background:var(--card);
+  padding:30px;
+  border-radius:18px;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+}
+
+.all-codes-section h2{
+  color:var(--accent);
+  margin-bottom:20px;
+  font-size:1.3rem;
+}
+
+.code-list{
+  max-height:500px;
+  overflow-y:auto;
+}
+
+.code-item{
+  background:#0f0f0f;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:10px;
+  border-left:4px solid var(--accent);
+}
+
+.code-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.code-text{
+  font-family:monospace;
+  font-size:1.1rem;
+  color:var(--accent);
+  font-weight:bold;
+}
+
+.code-details{
+  font-size:0.9rem;
+  color:var(--muted);
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.btn-small{
+  padding:8px 16px;
+  font-size:0.9rem;
+  background:#333;
+  color:white;
+}
+
+.btn-small.claim{
+  background:var(--accent);
+  color:black;
+}
+
+.btn-small.delete{
+  background:#ff5555;
+  color:white;
+}
+
+.empty-state{
+  text-align:center;
+  padding:40px;
+  color:var(--muted);
+}
+
+.claim-modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+}
+
+.claim-modal.show{
+  display:flex;
+}
+
+.modal-content{
+  background:var(--card);
+  padding:30px;
+  border-radius:18px;
+  max-width:400px;
+  width:90%;
+}
+
+.modal-content h3{
+  color:var(--accent);
+  margin-bottom:20px;
+}
+
+.modal-content input{
+  width:100%;
+  margin-bottom:15px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+}
+
+.modal-actions button{
+  flex:1;
+}
+
+/* Rarity colors */
+.common{color:#bbb;}
+.uncommon{color:#55ff55;}
+.rare{color:#55ffff;}
+.ultra{color:#ff55ff;}
+.legendary{color:#ffaa00;}
+
+/* Back button */
+.back-btn{
+  display:inline-block;
+  margin-bottom:20px;
+  padding:10px 20px;
+  background:#333;
+  color:white;
+  text-decoration:none;
+  border-radius:10px;
+  transition:0.3s;
+}
+
+.back-btn:hover{
+  background:#444;
+  transform:scale(1.05);
+}
+
+/* Stats section */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:15px;
+  margin-bottom:30px;
+}
+
+.stat-card{
+  background:var(--card);
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+}
+
+.stat-number{
+  font-size:2rem;
+  color:var(--accent);
+  font-weight:bold;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:0.9rem;
+  margin-top:5px;
+}
+
+/* Login screen */
+.login-screen{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+}
+
+.login-box{
+  background:var(--card);
+  padding:40px;
+  border-radius:18px;
+  width:400px;
+  max-width:90%;
+  box-shadow:0 10px 40px rgba(0,0,0,.5);
+  text-align:center;
+}
+
+.login-box h1{
+  margin-bottom:10px;
+}
 </style>
 </head>
-
 <body>
 
-<div class="card">
+<!-- Login Screen -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <h1>🛡 Admin Panel</h1>
+    <p style="color:var(--muted);margin-bottom:20px;">Enter password to continue</p>
+    <input type="password" id="passwordInput" placeholder="Enter password" style="width:100%;margin-bottom:15px;" />
+    <button onclick="checkPassword()" style="width:100%;">Login</button>
+    <p id="loginError" style="color:#ff5555;margin-top:10px;display:none;">Incorrect password</p>
+  </div>
+</div>
 
-<h1>🛡 Crate Code Checker</h1>
+<!-- Main Admin Panel (hidden by default) -->
+<div class="container" id="mainPanel" style="display:none;">
+  <a href="index.html" class="back-btn">← Back to Site</a>
+  
+  <h1>🛡 Admin Panel</h1>
 
-<input id="codeInput" placeholder="Paste crate code here">
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-number" id="totalCodes">0</div>
+      <div class="stat-label">Total Codes</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="unclaimedCodes">0</div>
+      <div class="stat-label">Unclaimed</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="claimedCodes">0</div>
+      <div class="stat-label">Claimed</div>
+    </div>
+  </div>
 
-<button onclick="verifyCode()">Verify Code</button>
+  <!-- Manual Code Entry -->
+  <div class="lookup-section">
+    <h2>➕ Add Code to Database</h2>
+    <p style="color:var(--muted);margin-bottom:15px;">When a player gives you a code, add it here first. Then you can check it anytime to see if they've already claimed it.</p>
+    <div class="input-group">
+      <input type="text" id="manualCodeInput" placeholder="Enter code (e.g., DIAMOND-A3F9)" />
+      <input type="text" id="manualItemInput" placeholder="Item name (e.g., Diamond Sword)" style="flex:0.8;" />
+      <select id="manualRaritySelect" style="padding:14px;border-radius:10px;border:2px solid #222;background:#0f0f0f;color:white;font-size:16px;flex:0.6;">
+        <option value="common">Common</option>
+        <option value="uncommon">Uncommon</option>
+        <option value="rare">Rare</option>
+        <option value="ultra">Ultra</option>
+        <option value="legendary">Legendary</option>
+      </select>
+      <button onclick="addManualCode()">Add Code</button>
+    </div>
+    
+    <div id="manualCodeResult" class="result-box">
+      <!-- Result appears here -->
+    </div>
+  </div>
 
-<div id="result"></div>
+  <!-- Quick Lookup -->
+  <div class="lookup-section">
+    <h2>🔍 Quick Code Lookup</h2>
+    <p style="color:var(--muted);margin-bottom:15px;">Paste a code here to instantly check if it's already been claimed.</p>
+    <div class="input-group">
+      <input type="text" id="lookupInput" placeholder="Paste code here (e.g., COMMON-A3F9)" />
+      <button onclick="lookupCode()">Check Code</button>
+    </div>
+    
+    <div id="lookupResult" class="result-box">
+      <!-- Results appear here -->
+    </div>
+  </div>
 
+  <!-- All Codes -->
+  <div class="all-codes-section">
+    <h2>📋 All Codes</h2>
+    <div class="code-list" id="codeList">
+      <div class="empty-state">No codes generated yet</div>
+    </div>
+  </div>
+</div>
+
+<!-- Claim Modal -->
+<div id="claimModal" class="claim-modal">
+  <div class="modal-content">
+    <h3>Mark Code as Claimed</h3>
+    <input type="text" id="usernameInput" placeholder="Enter player username" />
+    <div class="modal-actions">
+      <button onclick="closeClaimModal()">Cancel</button>
+      <button onclick="confirmClaim()" class="btn-small claim">Confirm</button>
+    </div>
+  </div>
 </div>
 
 <script>
+const ADMIN_PASSWORD = "HelvornSMP2025"; // Case-sensitive
 
-// 🔴 PASTE YOUR GOOGLE SCRIPT URL HERE
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyF_0sr790j2nhk_1lBc8EYRFuFQpKymO4T6OMUB--wy3bw_xQ5zMuMakyH114Q9HhN/exec";
-
-async function verifyCode(){
-
-const code = document.getElementById("codeInput").value.trim();
-const result = document.getElementById("result");
-
-// ===== Basic format validation =====
-if(!code.startsWith("HEL-")){
-result.innerHTML = `<span class="invalid">❌ Invalid Helvorn code format</span>`;
-return;
+// Check password
+function checkPassword(){
+  const input = document.getElementById('passwordInput').value;
+  const errorMsg = document.getElementById('loginError');
+  
+  if(input === ADMIN_PASSWORD){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainPanel').style.display = 'block';
+    sessionStorage.setItem('adminLoggedIn', 'true');
+  } else {
+    errorMsg.style.display = 'block';
+    document.getElementById('passwordInput').value = '';
+  }
 }
 
-const parts = code.split("-");
+// Check if already logged in
+window.addEventListener('DOMContentLoaded', function(){
+  if(sessionStorage.getItem('adminLoggedIn') === 'true'){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainPanel').style.display = 'block';
+  }
+  
+  // Allow Enter key for password
+  document.getElementById('passwordInput').addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+      checkPassword();
+    }
+  });
+});
 
-if(parts.length < 5){
-result.innerHTML = `<span class="invalid">❌ Broken code format</span>`;
-return;
+let currentClaimCode = null;
+
+// Add code manually to database
+function addManualCode(){
+  const code = document.getElementById('manualCodeInput').value.trim().toUpperCase();
+  const itemName = document.getElementById('manualItemInput').value.trim();
+  const rarity = document.getElementById('manualRaritySelect').value;
+  const resultBox = document.getElementById('manualCodeResult');
+  
+  if(!code){
+    resultBox.innerHTML = '<p style="color:#ff5555;">Please enter a code</p>';
+    resultBox.classList.add('show');
+    return;
+  }
+  
+  if(!itemName){
+    resultBox.innerHTML = '<p style="color:#ff5555;">Please enter an item name</p>';
+    resultBox.classList.add('show');
+    return;
+  }
+  
+  // Check if code already exists
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  const existing = codesArray.find(c => c.code === code);
+  if(existing){
+    resultBox.innerHTML = `
+      <p style="color:#ff5555;font-weight:bold;">❌ Code Already Exists</p>
+      <p style="color:var(--muted);margin-top:10px;">This code is already in the database.</p>
+      <div style="margin-top:10px;">
+        <strong>Status:</strong> <span class="status ${existing.status}">${existing.status.toUpperCase()}</span><br>
+        <strong>Item:</strong> ${existing.reward}
+      </div>
+    `;
+    resultBox.classList.add('show');
+    return;
+  }
+  
+  // Add new code
+  const newCode = {
+    code: code,
+    reward: itemName,
+    rarity: rarity,
+    timestamp: new Date().toISOString(),
+    status: 'unclaimed',
+    username: null,
+    claimedAt: null
+  };
+  
+  codesArray.push(newCode);
+  localStorage.setItem('crateCodes', JSON.stringify(codesArray));
+  
+  resultBox.innerHTML = `
+    <p style="color:#55ff55;font-weight:bold;">✅ Code Added Successfully</p>
+    <div class="info-row">
+      <span class="info-label">Code:</span>
+      <span class="info-value">${code}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Item:</span>
+      <span class="info-value ${rarity}">${itemName}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Rarity:</span>
+      <span class="info-value">${rarity}</span>
+    </div>
+    <div style="margin-top:15px;">
+      <button onclick="openClaimModal('${code}')">Mark as Claimed</button>
+    </div>
+  `;
+  resultBox.classList.add('show');
+  
+  // Clear inputs
+  document.getElementById('manualCodeInput').value = '';
+  document.getElementById('manualItemInput').value = '';
+  
+  // Reload code list
+  loadCodes();
 }
 
-// ===== Extract info from code =====
-const time = parts[1];
-const rarity = parts[2];
-const item = parts[3];
-
-// ===== Check Google Sheet =====
-try{
-
-const res = await fetch(SCRIPT_URL + "?check=" + encodeURIComponent(code));
-const data = await res.json();
-
-if(data.status === "claimed"){
-
-result.innerHTML = `
-<span class="invalid">⚠ Code Already Claimed</span><br><br>
-<span class="info">Item:</span> ${data.item}<br>
-<span class="info">Rarity:</span> ${data.rarity}<br>
-<span class="info">Player:</span> ${data.player}<br>
-<span class="info">Time:</span> ${data.timestamp}
-`;
-
-}else{
-
-result.innerHTML = `
-<span class="valid">✅ Code Valid & Unclaimed</span><br><br>
-<span class="info">Item:</span> ${item}<br>
-<span class="info">Rarity:</span> ${rarity}<br>
-<span class="info">Generated:</span> ${time}
-`;
-
+// Load and display all codes
+function loadCodes(){
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  // Update stats
+  const total = codesArray.length;
+  const unclaimed = codesArray.filter(c => c.status === 'unclaimed').length;
+  const claimed = codesArray.filter(c => c.status === 'claimed').length;
+  
+  document.getElementById('totalCodes').textContent = total;
+  document.getElementById('unclaimedCodes').textContent = unclaimed;
+  document.getElementById('claimedCodes').textContent = claimed;
+  
+  // Display codes
+  const codeList = document.getElementById('codeList');
+  
+  if(codesArray.length === 0){
+    codeList.innerHTML = '<div class="empty-state">No codes generated yet</div>';
+    return;
+  }
+  
+  // Sort by timestamp, newest first
+  codesArray.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  
+  codeList.innerHTML = codesArray.map(code => {
+    const date = new Date(code.timestamp).toLocaleString();
+    const claimedDate = code.claimedAt ? new Date(code.claimedAt).toLocaleString() : 'N/A';
+    
+    return `
+      <div class="code-item">
+        <div class="code-header">
+          <div class="code-text">${code.code}</div>
+          <span class="status ${code.status}">${code.status.toUpperCase()}</span>
+        </div>
+        <div class="code-details">
+          <div><strong>Reward:</strong> <span class="${code.rarity}">${code.reward}</span></div>
+          <div><strong>Generated:</strong> ${date}</div>
+          ${code.status === 'claimed' ? `
+            <div><strong>Player:</strong> ${code.username}</div>
+            <div><strong>Claimed:</strong> ${claimedDate}</div>
+          ` : ''}
+        </div>
+        <div class="actions">
+          ${code.status === 'unclaimed' ? 
+            `<button class="btn-small claim" onclick="openClaimModal('${code.code}')">Mark as Claimed</button>` : 
+            `<button class="btn-small" onclick="unclaimCode('${code.code}')">Mark as Unclaimed</button>`
+          }
+          <button class="btn-small delete" onclick="deleteCode('${code.code}')">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-}catch(err){
-result.innerHTML = `<span class="invalid">❌ Database connection failed</span>`;
+// Quick lookup function
+function lookupCode(){
+  const input = document.getElementById('lookupInput').value.trim().toUpperCase();
+  const resultBox = document.getElementById('lookupResult');
+  
+  if(!input){
+    resultBox.innerHTML = '<p style="color:#ff5555;">Please enter a code</p>';
+    resultBox.classList.add('show');
+    return;
+  }
+  
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  const found = codesArray.find(c => c.code === input);
+  
+  if(!found){
+    resultBox.innerHTML = `
+      <p style="color:#ff5555;font-weight:bold;">❌ Code not found</p>
+      <p style="color:var(--muted);margin-top:10px;">This code does not exist in the system.</p>
+    `;
+    resultBox.classList.add('show');
+    return;
+  }
+  
+  const date = new Date(found.timestamp).toLocaleString();
+  const claimedDate = found.claimedAt ? new Date(found.claimedAt).toLocaleString() : 'N/A';
+  
+  if(found.status === 'claimed'){
+    resultBox.innerHTML = `
+      <span class="status claimed">CLAIMED</span>
+      <div class="info-row">
+        <span class="info-label">Code:</span>
+        <span class="info-value">${found.code}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Reward:</span>
+        <span class="info-value ${found.rarity}">${found.reward}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Player:</span>
+        <span class="info-value">${found.username}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Generated:</span>
+        <span class="info-value">${date}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Claimed:</span>
+        <span class="info-value">${claimedDate}</span>
+      </div>
+    `;
+  } else {
+    resultBox.innerHTML = `
+      <span class="status unclaimed">UNCLAIMED</span>
+      <div class="info-row">
+        <span class="info-label">Code:</span>
+        <span class="info-value">${found.code}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Reward:</span>
+        <span class="info-value ${found.rarity}">${found.reward}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Generated:</span>
+        <span class="info-value">${date}</span>
+      </div>
+      <div style="margin-top:15px;">
+        <button onclick="openClaimModal('${found.code}')">Mark as Claimed</button>
+      </div>
+    `;
+  }
+  
+  resultBox.classList.add('show');
 }
 
+// Allow Enter key for lookup
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('lookupInput').addEventListener('keypress', function(e){
+    if(e.key === 'Enter'){
+      lookupCode();
+    }
+  });
+  loadCodes();
+});
+
+// Open claim modal
+function openClaimModal(code){
+  currentClaimCode = code;
+  document.getElementById('claimModal').classList.add('show');
+  document.getElementById('usernameInput').value = '';
+  document.getElementById('usernameInput').focus();
 }
 
+// Close claim modal
+function closeClaimModal(){
+  document.getElementById('claimModal').classList.remove('show');
+  currentClaimCode = null;
+}
+
+// Confirm claim
+function confirmClaim(){
+  const username = document.getElementById('usernameInput').value.trim();
+  
+  if(!username){
+    alert('Please enter a player username');
+    return;
+  }
+  
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  const index = codesArray.findIndex(c => c.code === currentClaimCode);
+  if(index !== -1){
+    codesArray[index].status = 'claimed';
+    codesArray[index].username = username;
+    codesArray[index].claimedAt = new Date().toISOString();
+    
+    localStorage.setItem('crateCodes', JSON.stringify(codesArray));
+    
+    closeClaimModal();
+    loadCodes();
+    
+    // Refresh lookup result if showing
+    const lookupInput = document.getElementById('lookupInput').value.trim().toUpperCase();
+    if(lookupInput === currentClaimCode){
+      lookupCode();
+    }
+  }
+}
+
+// Unclaim code
+function unclaimCode(code){
+  if(!confirm('Mark this code as unclaimed?')){
+    return;
+  }
+  
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  const index = codesArray.findIndex(c => c.code === code);
+  if(index !== -1){
+    codesArray[index].status = 'unclaimed';
+    codesArray[index].username = null;
+    codesArray[index].claimedAt = null;
+    
+    localStorage.setItem('crateCodes', JSON.stringify(codesArray));
+    loadCodes();
+  }
+}
+
+// Delete code
+function deleteCode(code){
+  if(!confirm('Delete this code permanently?')){
+    return;
+  }
+  
+  const codes = localStorage.getItem('crateCodes');
+  const codesArray = codes ? JSON.parse(codes) : [];
+  
+  const filtered = codesArray.filter(c => c.code !== code);
+  
+  localStorage.setItem('crateCodes', JSON.stringify(filtered));
+  loadCodes();
+}
+
+// Load codes on page load
+loadCodes();
 </script>
 
 </body>
