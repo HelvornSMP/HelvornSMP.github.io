@@ -485,11 +485,69 @@ function copyIP(elementId){
 const ADMIN_BYPASS_CODE = "HelvornSMP2025"; // Same as admin panel password
 
 const rewards = [
-  {name:'Common Crate Key',rarity:'common',class:'common'},
-  {name:'Uncommon Crate Key',rarity:'uncommon',class:'uncommon'},
-  {name:'Rare Crate Key',rarity:'rare',class:'rare'},
-  {name:'Ultra Crate Key',rarity:'ultra',class:'ultra'},
-  {name:'Legendary Crate Key',rarity:'legendary',class:'legendary'}
+  // TRASH ITEMS (35% chance) - Useless junk
+  {name:'Dirt Block',rarity:'common',class:'common'},
+  {name:'Cobblestone',rarity:'common',class:'common'},
+  {name:'Rotten Flesh',rarity:'common',class:'common'},
+  {name:'Wooden Hoe',rarity:'common',class:'common'},
+  {name:'Poisonous Potato',rarity:'common',class:'common'},
+  {name:'Wooden Sword',rarity:'common',class:'common'},
+  {name:'Leather Helmet',rarity:'common',class:'common'},
+  
+  // LOW TIER (30% chance) - Basic useful items
+  {name:'Iron Ingot',rarity:'common',class:'common'},
+  {name:'Iron Sword',rarity:'common',class:'common'},
+  {name:'Iron Pickaxe',rarity:'common',class:'common'},
+  {name:'Iron Axe',rarity:'common',class:'common'},
+  {name:'Golden Apple',rarity:'common',class:'common'},
+  {name:'Ender Pearl',rarity:'common',class:'common'},
+  {name:'Bread',rarity:'common',class:'common'},
+  {name:'Bow',rarity:'common',class:'common'},
+  {name:'Arrow (64)',rarity:'common',class:'common'},
+  
+  // MID TIER (20% chance) - Good items
+  {name:'Diamond',rarity:'uncommon',class:'uncommon'},
+  {name:'Emerald',rarity:'uncommon',class:'uncommon'},
+  {name:'Diamond Sword',rarity:'uncommon',class:'uncommon'},
+  {name:'Diamond Pickaxe',rarity:'uncommon',class:'uncommon'},
+  {name:'Diamond Axe',rarity:'uncommon',class:'uncommon'},
+  {name:'Enchanted Golden Apple',rarity:'uncommon',class:'uncommon'},
+  {name:'Ender Chest',rarity:'uncommon',class:'uncommon'},
+  {name:'TNT (16)',rarity:'uncommon',class:'uncommon'},
+  
+  // HIGH TIER (10% chance) - Great items
+  {name:'Diamond Helmet',rarity:'rare',class:'rare'},
+  {name:'Diamond Chestplate',rarity:'rare',class:'rare'},
+  {name:'Diamond Leggings',rarity:'rare',class:'rare'},
+  {name:'Diamond Boots',rarity:'rare',class:'rare'},
+  {name:'Shulker Box',rarity:'rare',class:'rare'},
+  {name:'Trident',rarity:'rare',class:'rare'},
+  {name:'Crossbow',rarity:'rare',class:'rare'},
+  {name:'Totem of Undying',rarity:'rare',class:'rare'},
+  
+  // EPIC TIER (4% chance) - Netherite gear
+  {name:'Netherite Ingot',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Sword',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Pickaxe',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Axe',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Helmet',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Chestplate',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Leggings',rarity:'ultra',class:'ultra'},
+  {name:'Netherite Boots',rarity:'ultra',class:'ultra'},
+  {name:'Elytra',rarity:'ultra',class:'ultra'},
+  {name:'Ancient Debris',rarity:'ultra',class:'ultra'},
+  
+  // LEGENDARY (1% chance) - Insanely rare
+  {name:'Nether Star',rarity:'legendary',class:'legendary'},
+  {name:'Dragon Egg',rarity:'legendary',class:'legendary'},
+  {name:'Beacon',rarity:'legendary',class:'legendary'},
+  {name:'Enchanted Book (Mending)',rarity:'legendary',class:'legendary'},
+  {name:'Enchanted Book (Fortune III)',rarity:'legendary',class:'legendary'},
+  {name:'Enchanted Book (Silk Touch)',rarity:'legendary',class:'legendary'},
+  {name:'Enchanted Book (Sharpness V)',rarity:'legendary',class:'legendary'},
+  {name:'Enchanted Book (Protection IV)',rarity:'legendary',class:'legendary'},
+  {name:'Enchanted Book (Unbreaking III)',rarity:'legendary',class:'legendary'},
+  {name:'Netherite Block',rarity:'legendary',class:'legendary'}
 ];
 
 let generatedCode = '';
@@ -536,14 +594,39 @@ function openCrate(){
   spinner.innerHTML = '🎁 Opening...';
   
   setTimeout(()=>{
-    const roll = Math.random();
+    const roll = Math.random() * 100; // 0-100
     let reward;
     
-    if(roll < 0.50) reward = rewards[0];
-    else if(roll < 0.75) reward = rewards[1];
-    else if(roll < 0.90) reward = rewards[2];
-    else if(roll < 0.98) reward = rewards[3];
-    else reward = rewards[4];
+    // TRASH ITEMS - 35% (0-35)
+    if(roll < 35){
+      const trashItems = rewards.filter(r => ['Dirt Block','Cobblestone','Rotten Flesh','Wooden Hoe','Poisonous Potato','Wooden Sword','Leather Helmet'].includes(r.name));
+      reward = trashItems[Math.floor(Math.random() * trashItems.length)];
+    }
+    // LOW TIER - 30% (35-65)
+    else if(roll < 65){
+      const lowTier = rewards.filter(r => r.rarity === 'common' && !['Dirt Block','Cobblestone','Rotten Flesh','Wooden Hoe','Poisonous Potato','Wooden Sword','Leather Helmet'].includes(r.name));
+      reward = lowTier[Math.floor(Math.random() * lowTier.length)];
+    }
+    // MID TIER - 20% (65-85)
+    else if(roll < 85){
+      const midTier = rewards.filter(r => r.rarity === 'uncommon');
+      reward = midTier[Math.floor(Math.random() * midTier.length)];
+    }
+    // HIGH TIER - 10% (85-95)
+    else if(roll < 95){
+      const highTier = rewards.filter(r => r.rarity === 'rare');
+      reward = highTier[Math.floor(Math.random() * highTier.length)];
+    }
+    // EPIC TIER - 4% (95-99)
+    else if(roll < 99){
+      const epicTier = rewards.filter(r => r.rarity === 'ultra');
+      reward = epicTier[Math.floor(Math.random() * epicTier.length)];
+    }
+    // LEGENDARY - 1% (99-100)
+    else {
+      const legendary = rewards.filter(r => r.rarity === 'legendary');
+      reward = legendary[Math.floor(Math.random() * legendary.length)];
+    }
     
     // NEW FORMAT: ITEM-NAME-XXXX (e.g., COMMON-A3F9, LEGENDARY-K7M2)
     const itemName = reward.name.replace(/ Crate Key$/i, '').replace(/\s+/g, '-').toUpperCase();
@@ -644,4 +727,3 @@ setInterval(updateTimer, 1000);
 
 </body>
 </html>
-
