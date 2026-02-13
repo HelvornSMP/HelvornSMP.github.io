@@ -302,7 +302,7 @@ details p{color:var(--muted);margin-top:8px}
 
 <!-- CRATE CARD -->
 <div class="card">
-<h2>🎁 Daily Crate</h2>
+<h2>🎁 Crate (Every 4 Hours)</h2>
 <button class="crateBtn" onclick="openCrate()">Open Crate</button>
 <div class="spinner" id="spinner"></div>
 <p id="crateResult"></p>
@@ -334,8 +334,8 @@ Above all, I strive to be kind, supportive, and encouraging to everyone I meet, 
     <p>This is a true anarchy server: griefing is allowed and hacking is not permitted. Staff reserves the right to act on serious abuse.</p>
   </details>
   <details>
-    <summary>How do daily crates work?</summary>
-    <p>Open the "Daily Crate" card to receive a once-per-24-hours reward and a redeemable code. You can copy the code and submit it for manual verification by staff.</p>
+    <summary>How do crates work?</summary>
+    <p>Open the "Crate (Every 4 Hours)" card to receive a reward every 4 hours and a redeemable code. You can copy the code and submit it for manual verification by staff.</p>
   </details>
   <details>
     <summary>How do I report bugs or cheaters?</summary>
@@ -580,8 +580,9 @@ function openCrate(){
     const lastOpen = localStorage.getItem('lastCrateOpen');
     const now = Date.now();
     
-    if(lastOpen && (now - lastOpen) < 86400000){
-      const timeLeft = 86400000 - (now - lastOpen);
+    // 4 hours = 14400000 milliseconds
+    if(lastOpen && (now - lastOpen) < 14400000){
+      const timeLeft = 14400000 - (now - lastOpen);
       const hours = Math.floor(timeLeft / 3600000);
       const minutes = Math.floor((timeLeft % 3600000) / 60000);
       document.getElementById('crateResult').innerHTML = `⏳ Come back in ${hours}h ${minutes}m`;
@@ -707,7 +708,7 @@ function updateTimer(){
   }
   
   const now = Date.now();
-  const timeLeft = 86400000 - (now - lastOpen);
+  const timeLeft = 14400000 - (now - lastOpen); // 4 hours
   
   if(timeLeft <= 0){
     timerDiv.innerHTML = '✅ Ready to open!';
