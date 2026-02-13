@@ -307,7 +307,6 @@ details p{color:var(--muted);margin-top:8px}
 <div class="spinner" id="spinner"></div>
 <p id="crateResult"></p>
 <button class="copyBtn" id="copyBtn" style="display:none;" onclick="copyCrateCode()">Copy Code</button>
-<button class="crateBtn" id="submitBtn" style="display:none;" onclick="submitClaim()">Submit Claim</button>
 <p id="timer"></p>
 </div>
 
@@ -645,7 +644,6 @@ function openCrate(){
       `You got: <span class="${reward.class}">${reward.name}</span><br>Code: <strong>${generatedCode}</strong>`;
     
     document.getElementById('copyBtn').style.display = 'block';
-    document.getElementById('submitBtn').style.display = 'block';
     spinner.innerHTML = '';
     
     // Only set timer if not admin
@@ -678,17 +676,8 @@ function saveCodeToAdmin(code, reward){
 
 function copyCrateCode(){
   navigator.clipboard.writeText(generatedCode).then(()=>{
-    alert('Code copied! Submit it to claim your reward.');
+    alert('Code copied! Give it to an admin to claim your reward.');
   });
-}
-
-function submitClaim(){
-  if(!generatedCode){
-    alert('No code to submit!');
-    return;
-  }
-  
-  alert(`Code "${generatedCode}" submitted! An admin will verify and give you your reward.`);
 }
 
 function updateTimer(){
