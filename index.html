@@ -746,12 +746,16 @@ async function fetchPlayers(){
       return;
     }
     
-    playerList.innerHTML = data.players.list.map(player => `
-      <div style="display:flex;align-items:center;gap:10px;padding:8px;background:#0f0f0f;border-radius:8px;margin-bottom:8px;">
-        <img src="https://mc-heads.net/avatar/${player}/32" style="border-radius:4px;" alt="${player}" />
-        <div style="font-weight:bold;color:var(--text);">${player}</div>
-      </div>
-    `).join('');
+    // Handle both string names and player objects
+    playerList.innerHTML = data.players.list.map(player => {
+      const playerName = typeof player === 'string' ? player : (player.name || player.uuid || 'Unknown');
+      return `
+        <div style="display:flex;align-items:center;gap:10px;padding:8px;background:#0f0f0f;border-radius:8px;margin-bottom:8px;">
+          <img src="https://mc-heads.net/avatar/${playerName}/32" style="border-radius:4px;" alt="${playerName}" />
+          <div style="font-weight:bold;color:var(--text);">${playerName}</div>
+        </div>
+      `;
+    }).join('');
     
   } catch(error){
     console.error('Player fetch error:', error);
