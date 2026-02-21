@@ -11,6 +11,13 @@
 <meta property="og:type" content="website" />
 <meta name="theme-color" content="#c9b458" />
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://trtfscegsnsmmnmekmln.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_LkGhbEoA9GClJsUJH-ueMw_1Vn7FtYL';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
 <style>
 :root{
   --bg:#0a0a0a;
@@ -842,6 +849,23 @@ async function checkStatus(){
   const text=document.getElementById('statusText');
   
   try{
+    const { data, error } = await supabase
+      .from('server_status')
+      .select('*')
+      .order('last_updated', { ascending: false })
+      .limit(1)
+      .single();
+    
+    if(error) throw error;
+    
+    if(data && data.is_online){
+      dot.classList.add('online');
+      text.textContent=`Server Online - ${data.players_online}/${data.max_players} players`;
+    }else{
+      text.textContent='Server Offline';
+    }
+  }catch(err){
+    console.error('Status check error:', err);
     const res=await fetch('https://api.mcsrvstat.us/3/helvornnetwork.playserver.pro');
     const data=await res.json();
     
@@ -853,8 +877,6 @@ async function checkStatus(){
     }else{
       text.textContent='Server Offline';
     }
-  }catch(err){
-    text.textContent='Status Unavailable';
   }
 }
 
@@ -868,39 +890,60 @@ function copyToClipboard(elementId){
   });
 }
 
-const SERVER_IP='helvornnetwork.playserver.pro';
-
 async function loadPlayers(){
   try{
-    const res=await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
-    const data=await res.json();
+    const { data: statusData, error: statusError } = await supabase
+      .from('server_status')
+      .select('*')
+      .order('last_updated', { ascending: false })
+      .limit(1)
+      .single();
     
     const countEl=document.getElementById('playerCount');
     const listEl=document.getElementById('playerList');
     
-    if(!data.online){
+    if(statusError || !statusData || !statusData.is_online){
       countEl.textContent='Server Offline';
       listEl.innerHTML='<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
       return;
     }
     
-    countEl.textContent=`${data.players.online}/${data.players.max} players online`;
+    countEl.textContent=`${statusData.players_online}/${statusData.max_players} players online`;
     
-    if(data.players.online===0||!data.players.list){
+    if(statusData.players_online === 0){
       listEl.innerHTML='<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
       return;
     }
     
-    listEl.innerHTML=data.players.list.map(player=>{
-      const name=typeof player==='string'?player:(player.name||'Unknown');
+    const { data: players, error: playersError } = await supabase
+      .from('players')
+      .select('minecraft_username, last_seen')
+      .order('last_seen', { ascending: false })
+      .limit(20);
+    
+    if(playersError || !players || players.length === 0){
+      listEl.innerHTML='<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
+      return;
+    }
+    
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    const onlinePlayers = players.filter(p => new Date(p.last_seen) > fiveMinutesAgo);
+    
+    if(onlinePlayers.length === 0){
+      listEl.innerHTML='<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
+      return;
+    }
+    
+    listEl.innerHTML=onlinePlayers.map(player=>{
       return`
         <div class="player-entry">
-          <img src="https://mc-heads.net/avatar/${name}/40" alt="${name}" class="player-avatar" onerror="this.src='https://mc-heads.net/avatar/steve/40'">
-          <span class="player-name">${name}</span>
+          <img src="https://mc-heads.net/avatar/${player.minecraft_username}/40" alt="${player.minecraft_username}" class="player-avatar" onerror="this.src='https://mc-heads.net/avatar/steve/40'">
+          <span class="player-name">${player.minecraft_username}</span>
         </div>
       `;
     }).join('');
   }catch(err){
+    console.error('Player load error:', err);
     document.getElementById('playerCount').textContent='Unable to load players';
   }
 }
