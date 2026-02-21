@@ -3,49 +3,55 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>HelvornSMP • Simple Survival</title>
+<title>HelvornSMP - Welcome</title>
 
-<meta name="description" content="HelvornSMP — Java & Bedrock simple survival. Join the community and play with crossplay support." />
-<meta property="og:title" content="HelvornSMP • Simple Survival" />
-<meta property="og:description" content="Java & Bedrock simple survival server. True players, active admins." />
+<meta name="description" content="Join HelvornSMP - A thriving Minecraft community with multiple game modes, active staff, and cross-platform support." />
+<meta property="og:title" content="HelvornSMP - Minecraft Community Server" />
+<meta property="og:description" content="Join our growing Minecraft community. Java & Bedrock crossplay supported." />
 <meta property="og:type" content="website" />
-<meta name="theme-color" content="#0b0b0b" />
-<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c9b458" />
 
 <style>
 :root{
-  --bg:#0b0b0b;
-  --card:#141414;
+  --bg:#0a0a0a;
+  --surface:#141414;
+  --elevated:#1a1a1a;
   --accent:#c9b458;
-  --text:#eaeaea;
-  --muted:#a0a0a0;
+  --accent-dim:#a89548;
+  --text-primary:#ffffff;
+  --text-secondary:#a0a0a0;
+  --text-tertiary:#707070;
+  --border:#252525;
+  --border-hover:#c9b458;
 }
 
-/* Light theme overrides */
 [data-theme="light"]{
   --bg:#ffffff;
-  --card:#f6f6f6;
+  --surface:#f8f8f8;
+  --elevated:#f0f0f0;
   --accent:#c9b458;
-  --text:#111111;
-  --muted:#444444;
+  --accent-dim:#a89548;
+  --text-primary:#0a0a0a;
+  --text-secondary:#505050;
+  --text-tertiary:#707070;
+  --border:#e0e0e0;
+  --border-hover:#c9b458;
 }
 
-/* Skip link for keyboard users */
-.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-.skip-link:focus{left:10px;top:10px;width:auto;height:auto;padding:8px 12px;background:#000;color:#fff;border-radius:6px;z-index:9999}
-
-*{box-sizing:border-box;margin:0;padding:0;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 body{
-  background:radial-gradient(circle at top,#1a1a1a,var(--bg));
-  color:var(--text);
-  font-family:system-ui;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+  background:var(--bg);
+  color:var(--text-primary);
+  line-height:1.6;
   overflow-x:hidden;
-  position:relative;
-  z-index:1;
 }
 
-/* CANVAS BACKGROUND */
 #particleCanvas{
   position:fixed;
   top:0;
@@ -53,6 +59,7 @@ body{
   width:100%;
   height:100%;
   z-index:-1;
+  opacity:0.3;
 }
 
 header{
@@ -60,177 +67,472 @@ header{
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:60px 20px;
   text-align:center;
-  padding:40px 20px;
+  position:relative;
 }
 
-.hero h1{
-  font-size:clamp(3rem,8vw,5rem);
-  color:var(--accent);
+.hero-content{
+  max-width:900px;
 }
 
-.hero p{color:var(--muted);margin:15px 0;}
+.logo{
+  font-size:clamp(3.5rem,12vw,7rem);
+  font-weight:900;
+  letter-spacing:-0.05em;
+  margin-bottom:24px;
+  background:linear-gradient(135deg,var(--accent) 0%,#ffd95e 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
 
-.buttons{
+.tagline{
+  font-size:clamp(1.1rem,3vw,1.5rem);
+  color:var(--text-secondary);
+  margin-bottom:48px;
+  font-weight:400;
+  max-width:600px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.cta-group{
   display:flex;
-  gap:15px;
+  gap:16px;
   justify-content:center;
   flex-wrap:wrap;
+  margin-bottom:40px;
 }
 
 .btn{
-  padding:14px 28px;
-  border-radius:10px;
+  padding:16px 40px;
+  border-radius:8px;
+  font-size:16px;
   font-weight:600;
-  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+  transition:all 0.2s ease;
   border:none;
-  transition:0.3s;
-}
-
-.btn:hover{
-  transform:scale(1.05);
-}
-
-.primary{
-  background:var(--accent);
-  color:black;
-}
-
-.secondary{
-  border:2px solid var(--accent);
-  color:var(--accent);
-  background:none;
-}
-
-/* Admin button */
-.admin-btn{
-  margin-top:15px;
-  background:var(--accent);
-  color:black;
-  border:none;
-  padding:14px 28px;
-  border-radius:10px;
-  font-weight:bold;
   cursor:pointer;
-  transition:0.3s;
-}
-.admin-btn:hover{
-  transform:scale(1.05);
-  background:#ffd633;
 }
 
-section{
-  padding:80px 20px;
-  display:flex;
-  justify-content:center;
+.btn-primary{
+  background:var(--accent);
+  color:#000;
 }
 
-.container{
-  max-width:1100px;
-  width:100%;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-}
-
-.card{
-  background:linear-gradient(180deg,#191919,var(--card));
-  border-radius:18px;
-  padding:25px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-  text-align:center;
-}
-
-.card h2{color:var(--accent);margin-bottom:10px;}
-.card p,.card li{color:var(--muted);font-size:.95rem;}
-ul{padding-left:18px;text-align:left;}
-
-.ip-box{
-  background:linear-gradient(135deg, rgba(201,180,88,0.1), rgba(201,180,88,0.05));
-  border:1px solid rgba(201,180,88,0.3);
-  padding:20px;
-  border-radius:14px;
-  margin-top:10px;
-  font-family:monospace;
-  color:var(--accent);
-  font-size:0.95rem;
-  font-weight:600;
-  box-shadow:0 4px 15px rgba(201,180,88,0.1);
-  transition:0.3s;
-  word-break:break-all;
-  line-height:1.6;
-}
-
-.ip-box:hover{
-  border-color:var(--accent);
-  box-shadow:0 6px 20px rgba(201,180,88,0.2);
+.btn-primary:hover{
+  background:var(--accent-dim);
   transform:translateY(-2px);
 }
 
-/* crate */
-.crateBtn{
-  margin-top:15px;
+.btn-secondary{
+  background:transparent;
+  color:var(--accent);
+  border:2px solid var(--accent);
+}
+
+.btn-secondary:hover{
+  background:rgba(201,180,88,0.1);
+  transform:translateY(-2px);
+}
+
+.btn-tertiary{
+  background:var(--surface);
+  color:var(--text-primary);
+  border:1px solid var(--border);
+  padding:12px 28px;
+  font-size:14px;
+}
+
+.btn-tertiary:hover{
+  background:var(--elevated);
+  border-color:var(--border-hover);
+}
+
+.status-indicator{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 32px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:50px;
+  margin-top:40px;
+  font-size:15px;
+  font-weight:500;
+}
+
+.status-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ef4444;
+  animation:pulse 2s cubic-bezier(0.4,0,0.6,1) infinite;
+}
+
+.status-dot.online{
+  background:#22c55e;
+}
+
+@keyframes pulse{
+  0%,100%{
+    opacity:1;
+  }
+  50%{
+    opacity:0.5;
+  }
+}
+
+.container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:100px 20px;
+}
+
+.section-header{
+  text-align:center;
+  margin-bottom:64px;
+}
+
+.section-title{
+  font-size:clamp(2rem,5vw,2.75rem);
+  font-weight:800;
+  margin-bottom:16px;
+  color:var(--text-primary);
+}
+
+.section-subtitle{
+  font-size:1.125rem;
+  color:var(--text-secondary);
+  max-width:600px;
+  margin:0 auto;
+}
+
+.grid{
+  display:grid;
+  gap:24px;
+  margin-bottom:80px;
+}
+
+.grid-2{
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+}
+
+.grid-3{
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:32px;
+  transition:all 0.3s ease;
+  opacity:0;
+  transform:translateY(20px);
+}
+
+.card.animate{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.card:hover{
+  border-color:var(--border-hover);
+  transform:translateY(-4px);
+}
+
+.card-title{
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:16px;
+  color:var(--text-primary);
+}
+
+.card-content{
+  color:var(--text-secondary);
+  line-height:1.8;
+}
+
+.card-content p{
+  margin-bottom:12px;
+}
+
+.feature-list{
+  list-style:none;
+  padding:0;
+}
+
+.feature-list li{
+  padding:12px 0;
+  color:var(--text-secondary);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.feature-list li:last-child{
+  border-bottom:none;
+}
+
+.feature-list li::before{
+  content:'';
+  width:6px;
+  height:6px;
+  background:var(--accent);
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.ip-display{
+  background:rgba(201,180,88,0.05);
+  border:1px solid var(--accent);
+  padding:16px 20px;
+  border-radius:8px;
+  font-family:'Courier New',monospace;
+  font-size:14px;
+  color:var(--accent);
+  margin:16px 0;
+  word-break:break-all;
+  font-weight:600;
+}
+
+.copy-button{
   width:100%;
   padding:12px;
-  font-weight:bold;
-  background:var(--accent);
-  color:black;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.crateBtn:hover{
-  transform:scale(1.02);
-}
-
-.copyBtn{
-  margin-top:10px;
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:2px solid var(--accent);
-  background:none;
+  background:transparent;
   color:var(--accent);
+  border:2px solid var(--accent);
+  border-radius:8px;
+  font-weight:600;
   cursor:pointer;
-  transition:0.3s;
+  transition:all 0.2s ease;
+  margin-top:8px;
 }
 
-.copyBtn:hover{
+.copy-button:hover{
   background:var(--accent);
-  color:black;
+  color:#000;
 }
 
-.spinner{
-  height:22px;
-  margin:10px 0;
+.player-counter{
+  font-size:1.75rem;
+  font-weight:700;
+  color:var(--accent);
+  margin-bottom:20px;
 }
 
-/* rarity colors */
-.common{color:#bbb;}
-.uncommon{color:#55ff55;}
-.rare{color:#55ffff;}
-.ultra{color:#ff55ff;}
-.legendary{color:#ffaa00;}
+.players-grid{
+  display:grid;
+  gap:12px;
+  max-height:320px;
+  overflow-y:auto;
+}
+
+.player-entry{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:12px 16px;
+  background:var(--elevated);
+  border-radius:8px;
+  transition:background 0.2s ease;
+}
+
+.player-entry:hover{
+  background:rgba(201,180,88,0.05);
+}
+
+.player-avatar{
+  width:40px;
+  height:40px;
+  border-radius:6px;
+  image-rendering:pixelated;
+}
+
+.player-name{
+  font-weight:600;
+  font-size:15px;
+  color:var(--text-primary);
+}
+
+.modes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  margin-top:48px;
+}
+
+.mode-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  text-align:center;
+  transition:all 0.3s ease;
+  opacity:0;
+  transform:translateY(20px);
+}
+
+.mode-card.animate{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.mode-card:hover{
+  border-color:var(--accent);
+  transform:translateY(-4px);
+}
+
+.mode-title{
+  font-size:1.25rem;
+  font-weight:700;
+  margin-bottom:8px;
+  color:var(--text-primary);
+}
+
+.mode-description{
+  font-size:14px;
+  color:var(--text-secondary);
+  line-height:1.6;
+  margin-bottom:16px;
+}
+
+.mode-status{
+  display:inline-block;
+  padding:4px 12px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:600;
+  background:rgba(34,197,94,0.1);
+  color:#22c55e;
+  border:1px solid rgba(34,197,94,0.2);
+}
+
+.mode-status.inactive{
+  background:rgba(156,163,175,0.1);
+  color:#9ca3af;
+  border:1px solid rgba(156,163,175,0.2);
+}
+
+.mode-status.soon{
+  background:rgba(250,204,21,0.1);
+  color:#facc15;
+  border:1px solid rgba(250,204,21,0.2);
+}
+
+.faq-container{
+  max-width:800px;
+  margin:0 auto;
+}
+
+.faq-item{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin-bottom:16px;
+  overflow:hidden;
+  transition:border-color 0.2s ease;
+  opacity:0;
+  transform:translateY(20px);
+}
+
+.faq-item.animate{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.faq-item:hover{
+  border-color:var(--border-hover);
+}
+
+.faq-question{
+  width:100%;
+  padding:20px 24px;
+  background:transparent;
+  border:none;
+  text-align:left;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:1.05rem;
+  font-weight:600;
+  color:var(--text-primary);
+  transition:color 0.2s ease;
+}
+
+.faq-question:hover{
+  color:var(--accent);
+}
+
+.faq-icon{
+  color:var(--accent);
+  font-size:1.25rem;
+  transition:transform 0.3s ease;
+}
+
+.faq-item.active .faq-icon{
+  transform:rotate(45deg);
+}
+
+.faq-answer{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.3s ease;
+}
+
+.faq-answer-content{
+  padding:0 24px 20px 24px;
+  color:var(--text-secondary);
+  line-height:1.8;
+}
+
+.faq-item.active .faq-answer{
+  max-height:500px;
+}
 
 footer{
+  border-top:1px solid var(--border);
+  padding:40px 20px;
   text-align:center;
-  padding:30px;
-  color:var(--muted);
-  border-top:1px solid #222;
+  color:var(--text-tertiary);
+  font-size:14px;
 }
 
-/* About Me Card */
-#aboutMeCard p {
-  line-height:1.5;
-  text-align:left;
+::-webkit-scrollbar{
+  width:8px;
 }
 
-/* FAQ details */
-details{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:10px;border-radius:10px;margin-bottom:10px}
-summary{cursor:pointer;font-weight:700;color:var(--accent);outline:none}
-details p{color:var(--muted);margin-top:8px}
+::-webkit-scrollbar-track{
+  background:var(--surface);
+}
+
+::-webkit-scrollbar-thumb{
+  background:var(--accent);
+  border-radius:4px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:var(--accent-dim);
+}
+
+@media (max-width:768px){
+  .container{
+    padding:60px 16px;
+  }
+  
+  .cta-group{
+    flex-direction:column;
+  }
+  
+  .btn{
+    width:100%;
+  }
+}
 </style>
 </head>
 
@@ -238,535 +540,387 @@ details p{color:var(--muted);margin-top:8px}
 
 <canvas id="particleCanvas"></canvas>
 
-<a class="skip-link" href="#main">Skip to content</a>
-
 <header>
-<div class="hero">
-<h1>HELVORNSMP</h1>
-<p>Java & Bedrock • Simple Survival • No Hacks</p>
-
-<div class="buttons">
-<a class="btn primary" href="#join">Join Server</a>
-<a class="btn secondary" href="https://discord.gg/4H3Cgj77DH" target="_blank">Discord</a>
-</div>
-
-<!-- Admin button -->
-<a href="admin.html"><button class="admin-btn">🛡 Admin Panel</button></a>
-
-<!-- Theme toggle -->
-<div style="margin-top:14px;">
-  <button id="themeToggle" class="btn secondary" aria-pressed="false">Toggle Theme</button>
-</div>
-
-<div style="margin-top:30px;">
-<strong>Server Status:</strong>
-<div id="status" style="margin-top:10px;color:var(--accent)" aria-live="polite">Checking…</div>
-</div>
-
-</div>
+  <div class="hero-content">
+    <h1 class="logo">HELVORNSMP</h1>
+    <p class="tagline">A thriving Minecraft community where players come together to build, explore, and create lasting memories</p>
+    
+    <div class="cta-group">
+      <a href="#connect" class="btn btn-primary">Join Now</a>
+      <a href="https://discord.gg/4H3Cgj77DH" class="btn btn-secondary" target="_blank">Discord Server</a>
+    </div>
+    
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="admin.html" class="btn btn-tertiary">Admin Panel</a>
+      <button id="themeToggle" class="btn btn-tertiary">
+        <span id="themeText">Light Mode</span>
+      </button>
+    </div>
+    
+    <div class="status-indicator">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Checking status...</span>
+    </div>
+  </div>
 </header>
- 
-<section id="join" role="region" aria-label="Join Server" tabindex="-1">
-<div class="container">
 
-<div class="card">
-<h2>Server Info</h2>
-<p>Pure Simple survival. Griefing allowed. No hacking.</p>
+<main>
 
-<div class="ip-box">Java IP: <span id="java-ip">helvornsmp.playserver.pro</span></div>
-<button class="btn secondary" onclick="copyIP('java-ip')">Copy Java IP</button>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Welcome to HelvornSMP</h2>
+      <p class="section-subtitle">Experience Minecraft the way it was meant to be played - with friends, freedom, and endless possibilities</p>
+    </div>
 
-<div class="ip-box" style="margin-top:15px;">Bedrock: <span id="bedrock-ip">helvornsmp.playserver.pro:35098</span></div>
-<button class="btn secondary" onclick="copyIP('bedrock-ip')">Copy Bedrock</button>
-</div>
+    <div class="grid grid-3">
+      
+      <div class="card" data-delay="0">
+        <h3 class="card-title">Cross-Platform Play</h3>
+        <div class="card-content">
+          <p>Connect from any device. Java Edition and Bedrock Edition players can play together seamlessly on our server.</p>
+        </div>
+      </div>
 
-<div class="card">
-<h2>Why Helvorn?</h2>
-<ul>
-<li>Java + Bedrock Crossplay</li>
-<li>Cracked Support</li>
-<li>Active Admins</li>
-<li>True Survival</li>
-</ul>
-</div>
+      <div class="card" data-delay="100">
+        <h3 class="card-title">Active Community</h3>
+        <div class="card-content">
+          <p>Join a welcoming community of players from around the world. Make friends, form alliances, and build together.</p>
+        </div>
+      </div>
 
-<div class="card">
-<h2>How To Start Server</h2>
-<ul>
-<li>Try joining</li>
-<li>Cancel connection</li>
-<li>Wait for server to wake</li>
-<li>Join again</li>
-</ul>
-</div>
+      <div class="card" data-delay="200">
+        <h3 class="card-title">Regular Updates</h3>
+        <div class="card-content">
+          <p>We're constantly improving the server with new features, events, and game modes based on community feedback.</p>
+        </div>
+      </div>
 
-<!-- CRATE CARD -->
-<div class="card">
-<h2>🎁 Crate (Every 4 Hours)</h2>
-<button class="crateBtn" onclick="openCrate()">Open Crate</button>
-<div class="spinner" id="spinner"></div>
-<p id="crateResult"></p>
-<button class="copyBtn" id="copyBtn" style="display:none;" onclick="copyCrateCode()">Copy Code</button>
-<p id="timer"></p>
-</div>
+    </div>
+  </div>
 
-<!-- ABOUT ME CARD -->
-<div class="card" id="aboutMeCard">
-<h2>About Me</h2>
-<p>
-I am a coder and developer with a passion for creating and building things that people enjoy.
-I love entertaining others and sharing knowledge to help others pursue their goals and accomplish tasks in life.
-I enjoy learning new technologies, exploring creative ideas, and turning them into real projects.
-Above all, I strive to be kind, supportive, and encouraging to everyone I meet, whether online or in real life.
-</p>
-</div>
+  <div class="container" id="connect">
+    <div class="section-header">
+      <h2 class="section-title">Connect to Server</h2>
+      <p class="section-subtitle">Start your adventure today. Copy the server address and launch Minecraft</p>
+    </div>
 
-<!-- FAQ CARD -->
-<div class="card" id="faqCard">
-  <h2>FAQ</h2>
-  <details>
-    <summary>How do I join the server?</summary>
-    <p>Use the Java IP <strong>helvornsmp.playserver.pro</strong> or Bedrock at <strong>helvornsmp.playserver.pro:35098</strong>. If the server is sleeping, try joining twice — it may take a moment to wake.</p>
-  </details>
-  <details>
-    <summary>What are the rules?</summary>
-    <p>This is a true survival server: griefing is allowed and hacking is not permitted. Staff reserves the right to act on serious abuse.</p>
-  </details>
-  <details>
-    <summary>How do crates work?</summary>
-    <p>Open the "Crate (Every 4 Hours)" card to receive a reward every 4 hours and a redeemable code. You can copy the code and submit it for manual verification by staff.</p>
-  </details>
-  <details>
-    <summary>How do I report bugs or cheaters?</summary>
-    <p>Join our Discord via the link above and open a report in the appropriate channel — include evidence and timestamps when possible.</p>
-  </details>
-</div>
+    <div class="grid grid-2">
+      
+      <div class="card" data-delay="0">
+        <h3 class="card-title">Server Information</h3>
+        <div class="card-content">
+          <div class="ip-display">
+            Java Edition<br>
+            <span id="javaIP">helvornnetwork.playserver.pro</span>
+          </div>
+          <button class="copy-button" onclick="copyToClipboard('javaIP')">Copy Java IP</button>
+          
+          <div class="ip-display" style="margin-top:20px;">
+            Bedrock Edition<br>
+            <span id="bedrockIP">helvornnetwork.playserver.pro:35098</span>
+          </div>
+          <button class="copy-button" onclick="copyToClipboard('bedrockIP')">Copy Bedrock IP</button>
+        </div>
+      </div>
 
-<!-- LIVE PLAYERS CARD -->
-<div class="card" id="livePlayersCard">
-  <h2>👥 Players Online</h2>
-  <div id="playerCount" style="color:var(--accent);font-size:1.2rem;margin-bottom:15px;">Loading...</div>
-  <div id="playerList" style="max-height:200px;overflow-y:auto;"></div>
-</div>
+      <div class="card" data-delay="100">
+        <h3 class="card-title">What We Offer</h3>
+        <ul class="feature-list">
+          <li>Java and Bedrock crossplay support</li>
+          <li>Multiple game modes to choose from</li>
+          <li>Active and responsive staff team</li>
+          <li>Regular community events</li>
+          <li>No pay-to-win mechanics</li>
+          <li>24/7 server uptime</li>
+        </ul>
+      </div>
 
-</div>
-</section>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Players Online</h2>
+      <p class="section-subtitle">See who's currently playing on the server</p>
+    </div>
+
+    <div class="card" data-delay="0" style="max-width:600px;margin:0 auto;">
+      <div class="player-counter" id="playerCount">Loading...</div>
+      <div class="players-grid" id="playerList"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Game Modes</h2>
+      <p class="section-subtitle">Choose your adventure</p>
+    </div>
+
+    <div class="modes-grid">
+      
+      <div class="mode-card" data-delay="0">
+        <h3 class="mode-title">Anarchy</h3>
+        <p class="mode-description">Total freedom. 1 rule no hacking, no protection. Survive in a world where anything goes.</p>
+        <span class="mode-status">Active</span>
+      </div>
+
+      <div class="mode-card" data-delay="100">
+        <h3 class="mode-title">Survival</h3>
+        <p class="mode-description">Classic Minecraft survival with light rules to keep the experience fair and fun.</p>
+        <span class="mode-status">Active</span>
+      </div>
+
+      <div class="mode-card" data-delay="200">
+        <h3 class="mode-title">Creative</h3>
+        <p class="mode-description">Unlimited resources and flight. Perfect for building your dream creations.</p>
+        <span class="mode-status inactive">Inactive</span>
+      </div>
+
+      <div class="mode-card" data-delay="300">
+        <h3 class="mode-title">Lifesteal</h3>
+        <p class="mode-description">Steal hearts from your enemies in combat. High-stakes PvP action.</p>
+        <span class="mode-status soon">Coming Soon</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Everything you need to know about joining and playing</p>
+    </div>
+
+    <div class="faq-container">
+      
+      <div class="faq-item" data-delay="0">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span>How do I join the server?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Copy the server IP address above and add it to your Minecraft server list. If the server appears offline, try joining twice as it may need to wake from sleep mode.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-delay="100">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span>Do I need to buy Minecraft?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            We support both premium and cracked clients. You can join with or without purchasing Minecraft.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-delay="200">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span>What are the server rules?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Rules vary by game mode. Anarchy has 1 rule, no hacking. Survival has basic anti-griefing protections. Creative mode is currently under disscussion. Join our Discord for detailed rule information.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-delay="300">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span>How do I switch between game modes?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            Contact an admin through Discord or use in-game commands if you have the required permissions. Each game mode runs on its own dedicated world.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" data-delay="400">
+        <button class="faq-question" onclick="toggleFAQ(this)">
+          <span>When will Lifesteal be available?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            We're currently developing the Lifesteal mode. Join our Discord server to stay updated on the release date and participate in beta testing.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
 
 <footer>
-© 2025 HelvornSMP
+  <p>&copy; 2025 HelvornSMP. All rights reserved.</p>
 </footer>
 
 <script>
-/* ============================================
-   PARTICLE SYSTEM
-   ============================================ */
-const canvas = document.getElementById("particleCanvas");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("particleCanvas");
+const ctx=canvas.getContext("2d");
 
-function resize(){
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+function resizeCanvas(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
 }
-resize();
-window.addEventListener("resize", resize);
-
-let mouse = {x:null,y:null};
-window.addEventListener("mousemove", e=>{
-  mouse.x=e.x;
-  mouse.y=e.y;
-});
+resizeCanvas();
+window.addEventListener("resize",resizeCanvas);
 
 let particles=[];
-for(let i=0;i<120;i++){
+for(let i=0;i<80;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
-    size:Math.random()*2+1,
-    vx:(Math.random()-0.5)*0.6,
-    vy:(Math.random()-0.5)*0.6
+    size:Math.random()*1.5+0.5,
+    speedX:(Math.random()-0.5)*0.4,
+    speedY:(Math.random()-0.5)*0.4
   });
 }
 
-function animate(){
+function animateParticles(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
   particles.forEach(p=>{
-    p.x+=p.vx;
-    p.y+=p.vy;
-
-    // Bounce off edges
-    if(p.x<0||p.x>canvas.width)p.vx*=-1;
-    if(p.y<0||p.y>canvas.height)p.vy*=-1;
-
+    p.x+=p.speedX;
+    p.y+=p.speedY;
+    if(p.x<0||p.x>canvas.width)p.speedX*=-1;
+    if(p.y<0||p.y>canvas.height)p.speedY*=-1;
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-    ctx.shadowBlur=18;
-    ctx.shadowColor="#c9b458";
-    ctx.fillStyle="#ffd95e";
+    ctx.fillStyle="rgba(201,180,88,0.4)";
     ctx.fill();
   });
-
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animateParticles);
 }
-animate();
+animateParticles();
 
-/* ============================================
-   THEME TOGGLE
-   ============================================ */
-const themeToggle = document.getElementById('themeToggle');
-const currentTheme = localStorage.getItem('theme') || 'dark';
+const themeToggle=document.getElementById('themeToggle');
+const themeText=document.getElementById('themeText');
+const currentTheme=localStorage.getItem('theme')||'dark';
 
-if(currentTheme === 'light'){
-  document.documentElement.setAttribute('data-theme', 'light');
-  themeToggle.setAttribute('aria-pressed', 'true');
+if(currentTheme==='light'){
+  document.documentElement.setAttribute('data-theme','light');
+  themeText.textContent='Dark Mode';
 }
 
-themeToggle.addEventListener('click', function(){
-  let theme = document.documentElement.getAttribute('data-theme');
-  if(theme === 'light'){
+themeToggle.addEventListener('click',function(){
+  const theme=document.documentElement.getAttribute('data-theme');
+  if(theme==='light'){
     document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'dark');
-    themeToggle.setAttribute('aria-pressed', 'false');
-  } else {
-    document.documentElement.setAttribute('data-theme', 'light');
-    localStorage.setItem('theme', 'light');
-    themeToggle.setAttribute('aria-pressed', 'true');
+    localStorage.setItem('theme','dark');
+    themeText.textContent='Light Mode';
+  }else{
+    document.documentElement.setAttribute('data-theme','light');
+    localStorage.setItem('theme','light');
+    themeText.textContent='Dark Mode';
   }
 });
 
-/* ============================================
-   SERVER STATUS CHECK
-   ============================================ */
-async function checkServerStatus(){
-  const statusDiv = document.getElementById('status');
-  statusDiv.innerHTML = '🔄 Checking...';
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const delay=entry.target.dataset.delay||0;
+      setTimeout(()=>{
+        entry.target.classList.add('animate');
+      },delay);
+      observer.unobserve(entry.target);
+    }
+  });
+},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+
+document.querySelectorAll('.card,.mode-card,.faq-item').forEach(el=>{
+  observer.observe(el);
+});
+
+async function checkStatus(){
+  const dot=document.getElementById('statusDot');
+  const text=document.getElementById('statusText');
   
-  try {
-    const response = await fetch('https://api.mcsrvstat.us/3/helvornsmp.playserver.pro', {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
+  try{
+    const res=await fetch('https://api.mcsrvstat.us/3/helvornnetwork.playserver.pro');
+    const data=await res.json();
     
-    if(!response.ok){
-      throw new Error('API request failed');
+    if(data.online){
+      const players=data.players?.online||0;
+      const max=data.players?.max||0;
+      dot.classList.add('online');
+      text.textContent=`Server Online - ${players}/${max} players`;
+    }else{
+      text.textContent='Server Offline';
     }
-    
-    const data = await response.json();
-    console.log('Server data:', data); // Debug log
-    
-    if(data.online === true){
-      const playersOnline = data.players?.online || 0;
-      const playersMax = data.players?.max || 0;
-      statusDiv.innerHTML = `🟢 Online • ${playersOnline}/${playersMax} players`;
-    } else {
-      statusDiv.innerHTML = '🔴 Offline or Sleeping';
-    }
-  } catch(error){
-    console.error('Status check error:', error);
-    // Fallback: Show manual check option
-    statusDiv.innerHTML = '⚠️ Status unavailable • <a href="https://mcsrvstat.us/server/helvornsmp.playserver.pro" target="_blank" style="color:var(--accent);text-decoration:underline;">Check manually</a>';
+  }catch(err){
+    text.textContent='Status Unavailable';
   }
 }
 
-checkServerStatus();
-setInterval(checkServerStatus, 60000);
+checkStatus();
+setInterval(checkStatus,60000);
 
-/* ============================================
-   COPY IP FUNCTION
-   ============================================ */
-function copyIP(elementId){
-  const ipText = document.getElementById(elementId).textContent;
-  navigator.clipboard.writeText(ipText).then(()=>{
-    alert('IP copied to clipboard!');
-  }).catch(err=>{
-    console.error('Failed to copy:', err);
+function copyToClipboard(elementId){
+  const text=document.getElementById(elementId).textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    alert('IP address copied to clipboard');
   });
 }
 
-/* ============================================
-   DAILY CRATE SYSTEM
-   ============================================ */
-const ADMIN_BYPASS_CODE = "HelvornSMP2025"; // Same as admin panel password
+const SERVER_IP='helvornnetwork.playserver.pro';
 
-const rewards = [
-  // TRASH ITEMS (35% chance) - Useless junk
-  {name:'Dirt Block',rarity:'common',class:'common'},
-  {name:'Cobblestone',rarity:'common',class:'common'},
-  {name:'Rotten Flesh',rarity:'common',class:'common'},
-  {name:'Wooden Hoe',rarity:'common',class:'common'},
-  {name:'Poisonous Potato',rarity:'common',class:'common'},
-  {name:'Wooden Sword',rarity:'common',class:'common'},
-  {name:'Leather Helmet',rarity:'common',class:'common'},
-  
-  // LOW TIER (30% chance) - Basic useful items
-  {name:'Iron Ingot',rarity:'common',class:'common'},
-  {name:'Iron Sword',rarity:'common',class:'common'},
-  {name:'Iron Pickaxe',rarity:'common',class:'common'},
-  {name:'Iron Axe',rarity:'common',class:'common'},
-  {name:'Golden Apple',rarity:'common',class:'common'},
-  {name:'Ender Pearl',rarity:'common',class:'common'},
-  {name:'Bread',rarity:'common',class:'common'},
-  {name:'Bow',rarity:'common',class:'common'},
-  {name:'Arrow (64)',rarity:'common',class:'common'},
-  
-  // MID TIER (20% chance) - Good items
-  {name:'Diamond',rarity:'uncommon',class:'uncommon'},
-  {name:'Emerald',rarity:'uncommon',class:'uncommon'},
-  {name:'Diamond Sword',rarity:'uncommon',class:'uncommon'},
-  {name:'Diamond Pickaxe',rarity:'uncommon',class:'uncommon'},
-  {name:'Diamond Axe',rarity:'uncommon',class:'uncommon'},
-  {name:'Enchanted Golden Apple',rarity:'uncommon',class:'uncommon'},
-  {name:'Ender Chest',rarity:'uncommon',class:'uncommon'},
-  {name:'TNT (16)',rarity:'uncommon',class:'uncommon'},
-  
-  // HIGH TIER (10% chance) - Great items
-  {name:'Diamond Helmet',rarity:'rare',class:'rare'},
-  {name:'Diamond Chestplate',rarity:'rare',class:'rare'},
-  {name:'Diamond Leggings',rarity:'rare',class:'rare'},
-  {name:'Diamond Boots',rarity:'rare',class:'rare'},
-  {name:'Shulker Box',rarity:'rare',class:'rare'},
-  {name:'Trident',rarity:'rare',class:'rare'},
-  {name:'Crossbow',rarity:'rare',class:'rare'},
-  {name:'Totem of Undying',rarity:'rare',class:'rare'},
-  
-  // EPIC TIER (4% chance) - Netherite gear
-  {name:'Netherite Ingot',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Sword',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Pickaxe',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Axe',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Helmet',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Chestplate',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Leggings',rarity:'ultra',class:'ultra'},
-  {name:'Netherite Boots',rarity:'ultra',class:'ultra'},
-  {name:'Elytra',rarity:'ultra',class:'ultra'},
-  {name:'Ancient Debris',rarity:'ultra',class:'ultra'},
-  
-  // LEGENDARY (1% chance) - Insanely rare
-  {name:'Nether Star',rarity:'legendary',class:'legendary'},
-  {name:'Dragon Egg',rarity:'legendary',class:'legendary'},
-  {name:'Beacon',rarity:'legendary',class:'legendary'},
-  {name:'Enchanted Book (Mending)',rarity:'legendary',class:'legendary'},
-  {name:'Enchanted Book (Fortune III)',rarity:'legendary',class:'legendary'},
-  {name:'Enchanted Book (Silk Touch)',rarity:'legendary',class:'legendary'},
-  {name:'Enchanted Book (Sharpness V)',rarity:'legendary',class:'legendary'},
-  {name:'Enchanted Book (Protection IV)',rarity:'legendary',class:'legendary'},
-  {name:'Enchanted Book (Unbreaking III)',rarity:'legendary',class:'legendary'},
-  {name:'Netherite Block',rarity:'legendary',class:'legendary'}
-];
-
-let generatedCode = '';
-
-// Check if user is admin (no timer)
-function isAdmin(){
-  return localStorage.getItem('adminBypass') === ADMIN_BYPASS_CODE;
-}
-
-// Admin bypass toggle (hidden feature)
-window.enableAdminMode = function(code){
-  if(code === ADMIN_BYPASS_CODE){
-    localStorage.setItem('adminBypass', code);
-    console.log('Admin mode enabled - No crate timer');
-    updateTimer();
-    return true;
-  }
-  return false;
-}
-
-window.disableAdminMode = function(){
-  localStorage.removeItem('adminBypass');
-  console.log('Admin mode disabled');
-  updateTimer();
-}
-
-function openCrate(){
-  // Skip timer check if admin
-  if(!isAdmin()){
-    const lastOpen = localStorage.getItem('lastCrateOpen');
-    const now = Date.now();
+async function loadPlayers(){
+  try{
+    const res=await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
+    const data=await res.json();
     
-    // 4 hours = 14400000 milliseconds
-    if(lastOpen && (now - lastOpen) < 14400000){
-      const timeLeft = 14400000 - (now - lastOpen);
-      const hours = Math.floor(timeLeft / 3600000);
-      const minutes = Math.floor((timeLeft % 3600000) / 60000);
-      document.getElementById('crateResult').innerHTML = `⏳ Come back in ${hours}h ${minutes}m`;
-      return;
-    }
-  }
-  
-  
-  const spinner = document.getElementById('spinner');
-  spinner.innerHTML = '🎁 Opening...';
-  
-  setTimeout(()=>{
-    const roll = Math.random() * 100; // 0-100
-    let reward;
-    
-    // TRASH ITEMS - 35% (0-35)
-    if(roll < 35){
-      const trashItems = rewards.filter(r => ['Dirt Block','Cobblestone','Rotten Flesh','Wooden Hoe','Poisonous Potato','Wooden Sword','Leather Helmet'].includes(r.name));
-      reward = trashItems[Math.floor(Math.random() * trashItems.length)];
-    }
-    // LOW TIER - 30% (35-65)
-    else if(roll < 65){
-      const lowTier = rewards.filter(r => r.rarity === 'common' && !['Dirt Block','Cobblestone','Rotten Flesh','Wooden Hoe','Poisonous Potato','Wooden Sword','Leather Helmet'].includes(r.name));
-      reward = lowTier[Math.floor(Math.random() * lowTier.length)];
-    }
-    // MID TIER - 20% (65-85)
-    else if(roll < 85){
-      const midTier = rewards.filter(r => r.rarity === 'uncommon');
-      reward = midTier[Math.floor(Math.random() * midTier.length)];
-    }
-    // HIGH TIER - 10% (85-95)
-    else if(roll < 95){
-      const highTier = rewards.filter(r => r.rarity === 'rare');
-      reward = highTier[Math.floor(Math.random() * highTier.length)];
-    }
-    // EPIC TIER - 4% (95-99)
-    else if(roll < 99){
-      const epicTier = rewards.filter(r => r.rarity === 'ultra');
-      reward = epicTier[Math.floor(Math.random() * epicTier.length)];
-    }
-    // LEGENDARY - 1% (99-100)
-    else {
-      const legendary = rewards.filter(r => r.rarity === 'legendary');
-      reward = legendary[Math.floor(Math.random() * legendary.length)];
-    }
-    
-    // NEW FORMAT: ITEM-NAME-XXXX (e.g., COMMON-A3F9, LEGENDARY-K7M2)
-    const itemName = reward.name.replace(/ Crate Key$/i, '').replace(/\s+/g, '-').toUpperCase();
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let randomCode = '';
-    for(let i = 0; i < 4; i++){
-      randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    generatedCode = `${itemName}-${randomCode}`;
-    
-    // Save code to localStorage for admin panel
-    saveCodeToAdmin(generatedCode, reward);
-    
-    document.getElementById('crateResult').innerHTML = 
-      `You got: <span class="${reward.class}">${reward.name}</span><br>Code: <strong>${generatedCode}</strong>`;
-    
-    document.getElementById('copyBtn').style.display = 'block';
-    spinner.innerHTML = '';
-    
-    // Only set timer if not admin
-    if(!isAdmin()){
-      localStorage.setItem('lastCrateOpen', Date.now().toString());
-    }
-    updateTimer();
-  }, 2000);
-}
-
-function saveCodeToAdmin(code, reward){
-  // Get existing codes
-  const codes = localStorage.getItem('crateCodes');
-  const codesArray = codes ? JSON.parse(codes) : [];
-  
-  // Add new code
-  codesArray.push({
-    code: code,
-    reward: reward.name,
-    rarity: reward.rarity,
-    timestamp: new Date().toISOString(),
-    status: 'unclaimed',
-    username: null,
-    claimedAt: null
-  });
-  
-  // Save back to localStorage
-  localStorage.setItem('crateCodes', JSON.stringify(codesArray));
-}
-
-function copyCrateCode(){
-  navigator.clipboard.writeText(generatedCode).then(()=>{
-    alert('Code copied! Give it to an admin to claim your reward.');
-  });
-}
-
-function updateTimer(){
-  const lastOpen = localStorage.getItem('lastCrateOpen');
-  const timerDiv = document.getElementById('timer');
-  
-  // Show admin status if enabled
-  if(isAdmin()){
-    timerDiv.innerHTML = '👑 Admin Mode: No Timer';
-    timerDiv.style.color = 'var(--accent)';
-    return;
-  }
-  
-  if(!lastOpen){
-    timerDiv.innerHTML = 'Open your first crate!';
-    return;
-  }
-  
-  const now = Date.now();
-  const timeLeft = 14400000 - (now - lastOpen); // 4 hours
-  
-  if(timeLeft <= 0){
-    timerDiv.innerHTML = '✅ Ready to open!';
-    return;
-  }
-  
-  const hours = Math.floor(timeLeft / 3600000);
-  const minutes = Math.floor((timeLeft % 3600000) / 60000);
-  const seconds = Math.floor((timeLeft % 60000) / 1000);
-  
-  timerDiv.innerHTML = `Next crate in: ${hours}h ${minutes}m ${seconds}s`;
-}
-
-updateTimer();
-setInterval(updateTimer, 1000);
-
-/* ============================================
-   LIVE PLAYER LIST
-   ============================================ */
-const SERVER_IP = 'helvornsmp.playserver.pro';
-
-async function fetchPlayers(){
-  try {
-    const response = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
-    const data = await response.json();
+    const countEl=document.getElementById('playerCount');
+    const listEl=document.getElementById('playerList');
     
     if(!data.online){
-      document.getElementById('playerCount').textContent = 'Server Offline';
-      document.getElementById('playerList').innerHTML = '<p style="color:var(--muted);">Server is offline or sleeping</p>';
+      countEl.textContent='Server Offline';
+      listEl.innerHTML='<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
       return;
     }
     
-    document.getElementById('playerCount').textContent = `${data.players.online}/${data.players.max} players online`;
+    countEl.textContent=`${data.players.online}/${data.players.max} players online`;
     
-    const playerList = document.getElementById('playerList');
-    
-    if(data.players.online === 0 || !data.players.list){
-      playerList.innerHTML = '<p style="color:var(--muted);">No players online</p>';
+    if(data.players.online===0||!data.players.list){
+      listEl.innerHTML='<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
       return;
     }
     
-    // Handle both string names and player objects
-    playerList.innerHTML = data.players.list.map(player => {
-      const playerName = typeof player === 'string' ? player : (player.name || player.uuid || 'Unknown');
-      return `
-        <div style="display:flex;align-items:center;gap:10px;padding:8px;background:#0f0f0f;border-radius:8px;margin-bottom:8px;">
-          <img src="https://mc-heads.net/avatar/${playerName}/32" style="border-radius:4px;image-rendering:pixelated;" alt="${playerName}" onerror="this.src='https://mc-heads.net/avatar/steve/32'" />
-          <div style="font-weight:bold;color:var(--text);">${playerName}</div>
+    listEl.innerHTML=data.players.list.map(player=>{
+      const name=typeof player==='string'?player:(player.name||'Unknown');
+      return`
+        <div class="player-entry">
+          <img src="https://mc-heads.net/avatar/${name}/40" alt="${name}" class="player-avatar" onerror="this.src='https://mc-heads.net/avatar/steve/40'">
+          <span class="player-name">${name}</span>
         </div>
       `;
     }).join('');
-    
-  } catch(error){
-    console.error('Player fetch error:', error);
-    document.getElementById('playerCount').textContent = 'Could not connect';
-    document.getElementById('playerList').innerHTML = '<p style="color:var(--muted);">Unable to load player list</p>';
+  }catch(err){
+    document.getElementById('playerCount').textContent='Unable to load players';
   }
 }
 
-// Update every 5 seconds
-fetchPlayers();
-setInterval(fetchPlayers, 5000);
+loadPlayers();
+setInterval(loadPlayers,5000);
+
+function toggleFAQ(btn){
+  const item=btn.parentElement;
+  const wasActive=item.classList.contains('active');
+  
+  document.querySelectorAll('.faq-item').forEach(el=>{
+    el.classList.remove('active');
+  });
+  
+  if(!wasActive){
+    item.classList.add('active');
+  }
+}
 </script>
 
 </body>
