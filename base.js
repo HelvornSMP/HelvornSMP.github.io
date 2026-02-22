@@ -159,9 +159,19 @@ async function checkStatus() {
     if (!response.ok) throw new Error();
 
     const data = await response.json();
-    if (data.online) {
+    const isOnline = !!data && data.online === true;
+    if (isOnline) {
       dot.classList.add('online');
-      text.textContent = `Server Online - ${data.players.online}/${data.players.max} players`;
+
+      const playersObj = data.players || {};
+      const onlineCount = typeof playersObj.online === 'number' ? playersObj.online : null;
+      const maxCount = typeof playersObj.max === 'number' ? playersObj.max : null;
+
+      if (onlineCount !== null && maxCount !== null) {
+        text.textContent = `Server Online - ${onlineCount}/${maxCount} players`;
+      } else {
+        text.textContent = 'Server Online';
+      }
     } else {
       dot.classList.remove('online');
       text.textContent = 'Server Offline';
@@ -203,15 +213,23 @@ async function loadPlayers() {
     const countEl = document.getElementById('playerCount');
     const listEl = document.getElementById('playerList');
 
-    if (!data.online || !data.players.list) {
+    if (!data || !data.online) {
       countEl.textContent = '0 Players Online';
       listEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
       return;
     }
 
-    countEl.textContent = `${data.players.online}/${data.players.max} players online`;
+    const playersObj = data.players || {};
+    const onlineCount = typeof playersObj.online === 'number' ? playersObj.online : null;
+    const maxCount = typeof playersObj.max === 'number' ? playersObj.max : null;
 
-    if (data.players.online === 0) {
+    if (onlineCount === null || maxCount === null) {
+      countEl.textContent = 'Players online';
+    } else {
+      countEl.textContent = `${onlineCount}/${maxCount} players online`;
+    }
+
+    if (!playersObj.list || onlineCount === 0) {
       listEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
       return;
     }
@@ -231,7 +249,8 @@ async function loadPlayers() {
 }
 
 loadPlayers();
-setInterval(loadPlayers, 5000);
+// Poll players less frequently to avoid unnecessary API load
+setInterval(loadPlayers, 30000);
 
 // Toggle FAQ items
 function toggleFAQ(btn) {
