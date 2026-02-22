@@ -159,6 +159,8 @@ async function checkStatus() {
     if (!response.ok) throw new Error();
 
     const data = await response.json();
+    console.debug('checkStatus: API response', data);
+    if (!dot || !text) console.debug('checkStatus: missing DOM elements', { dot, text });
     const playersObj = data && data.players ? data.players : {};
     const reportedOnline = data && data.online === true;
     const onlineCount = typeof playersObj.online === 'number' ? playersObj.online : null;
@@ -185,6 +187,7 @@ async function checkStatus() {
   } catch (error) {
     dot.classList.remove('online');
     text.textContent = 'Status Unknown';
+      console.error('checkStatus error', error);
   }
 }
 
@@ -215,6 +218,7 @@ async function loadPlayers() {
   try {
     const response = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
     const data = await response.json();
+    console.debug('loadPlayers: API response', data);
 
     const countEl = document.getElementById('playerCount');
     const listEl = document.getElementById('playerList');
@@ -251,6 +255,7 @@ async function loadPlayers() {
     }).join('');
   } catch (err) {
     document.getElementById('playerCount').textContent = 'Unable to load players';
+      console.error('loadPlayers error', err);
   }
 }
 
