@@ -258,6 +258,31 @@ loadPlayers();
 // Poll players less frequently to avoid unnecessary API load
 setInterval(loadPlayers, 30000);
 
+// Simple client-side navigation for sidebar
+function showSection(id) {
+  const sections = ['section-home','section-gamemodes','section-join'];
+  sections.forEach(sid => {
+    const el = document.getElementById(sid);
+    if (!el) return;
+    el.style.display = (sid === id) ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-link').forEach(link => {
+    if (link.dataset.target === id) link.classList.add('active'); else link.classList.remove('active');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.dataset.target;
+      if (target) showSection(target);
+    });
+  });
+  // default
+  showSection('section-home');
+});
+
 // Toggle FAQ items
 function toggleFAQ(btn) {
   const item = btn.parentElement;
@@ -271,3 +296,4 @@ function toggleFAQ(btn) {
     item.classList.add('active');
   }
 }
+
