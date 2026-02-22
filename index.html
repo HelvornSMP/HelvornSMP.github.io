@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HelvornSMP - Minecraft Server</title>
+
+  <meta name="description"
+    content="Join HelvornSMP - A Minecraft server with multiple game modes, active staff, and cross-platform support." />
+  <meta property="og:title" content="HelvornSMP" />
+  <meta property="og:description" content="Join the HelvornSMP Minecraft server - Java & Bedrock crossplay." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#c9b458" />
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <canvas id="particleCanvas"></canvas>
+
+  <canvas id="particleCanvas"></canvas>
+
+  <header id="section-home">
+    <div class="hero-content">
+      <h1 class="logo">HELVORNSMP</h1>
+      <p class="tagline">A Minecraft server where you can build, survive, and have fun with friends</p>
+
+      <div class="cta-group">
+        <a href="#connect" class="btn btn-primary">Join Now</a>
+        <a href="https://discord.gg/4H3Cgj77DH" class="btn btn-secondary" target="_blank">Discord Server</a>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
+        <button id="themeToggle" class="btn btn-tertiary">
+          <span id="themeText">Light Mode</span>
+        </button>
+      </div>
+
+      <div class="status-indicator">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Checking status...</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container" id="section-offer">
+      <div class="section-header">
+        <h2 class="section-title">What We Offer</h2>
+        <p class="section-subtitle">Everything you need for a solid Minecraft experience</p>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card" data-delay="0">
+          <h3 class="card-title">Cross-Platform</h3>
+          <div class="card-content">
+            <p>Both Java and Bedrock players can play together. No limitations.</p>
+          </div>
+        </div>
+
+        <div class="card" data-delay="100">
+          <h3 class="card-title">Community</h3>
+          <div class="card-content">
+            <p>Chill players, active staff, and a welcoming community. Join us and make some friends.</p>
+          </div>
+        </div>
+
+        <div class="card" data-delay="200">
+          <h3 class="card-title">Regular Updates</h3>
+          <div class="card-content">
+            <p>New features and improvements based on what the community wants.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="connect">
+      <div class="section-header">
+        <h2 class="section-title">How to Join</h2>
+        <p class="section-subtitle">Copy the address and add the server to your Minecraft server list</p>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card" data-delay="0">
+          <h3 class="card-title">Server Address</h3>
+          <div class="card-content">
+            <div class="ip-display">
+              Java Edition<br>
+              <span id="javaIP">helvornnetwork.playserver.pro</span>
+            </div>
+            <button class="copy-button" onclick="copyToClipboard('javaIP', this)">Copy Java IP</button>
+
+            <div class="ip-display" style="margin-top:20px;">
+              Bedrock Edition<br>
+              <span id="bedrockIP">helvornnetwork.playserver.pro:35098</span>
+            </div>
+            <button class="copy-button" onclick="copyToClipboard('bedrockIP', this)">Copy Bedrock IP</button>
+          </div>
+        </div>
+
+        <div class="card" data-delay="100">
+          <h3 class="card-title">Why Play Here</h3>
+          <ul class="feature-list">
+            <li>Java & Bedrock support</li>
+            <li>Multiple game modes</li>
+            <li>Fair staff, fair rules</li>
+            <li>Events and updates</li>
+            <li>No pay-to-win nonsense</li>
+            <li>Always running</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="section-online">
+      <div class="section-header">
+        <h2 class="section-title">Who's Online</h2>
+        <p class="section-subtitle">See who's playing right now</p>
+      </div>
+
+      <div class="card" data-delay="0" style="max-width:600px;margin:0 auto;">
+        <div class="player-counter" id="playerCount">Loading...</div>
+        <div class="players-grid" id="playerList"></div>
+      </div>
+    </div>
+
+    <div class="container" id="section-modes">
+      <div class="section-header">
+        <h2 class="section-title">Game Modes</h2>
+        <p class="section-subtitle">Choose your adventure</p>
+      </div>
+
+      <div class="modes-grid">
+        <div class="mode-card" data-delay="0">
+          <h3 class="mode-title">Anarchy</h3>
+          <p class="mode-description">Total freedom. 1 rule: no hacking. Survive in a world where anything goes.</p>
+          <span class="mode-status">Active</span>
+        </div>
+
+        <div class="mode-card" data-delay="100">
+          <h3 class="mode-title">Survival</h3>
+          <p class="mode-description">Classic Minecraft survival with light rules to keep the experience fair and fun.
+          </p>
+          <span class="mode-status">Active</span>
+        </div>
+
+        <div class="mode-card" data-delay="200">
+          <h3 class="mode-title">Creative</h3>
+          <p class="mode-description">Unlimited resources and flight. Perfect for building your dream creations.</p>
+          <span class="mode-status inactive">Inactive</span>
+        </div>
+
+        <div class="mode-card" data-delay="300">
+          <h3 class="mode-title">Lifesteal</h3>
+          <p class="mode-description">Steal hearts from your enemies in combat. High-stakes PvP action.</p>
+          <span class="mode-status soon">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" id="section-faq">
+      <div class="section-header">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Everything you need to know about joining and playing</p>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-item" data-delay="0">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>How do I join?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Copy the server IP and add it to your server list in Minecraft. If it says the server is offline, try
+              joining twice - it might need a moment to wake up.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-delay="100">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Do I need to own Minecraft?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Nope. We support both legit and cracked Minecraft clients. Join however you want.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-delay="200">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>What are the server rules?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Rules depend on the game mode. Anarchy basically has one rule - no hacking. Survival has anti-griefing
+              protections. Check our Discord for the full rules list.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-delay="300">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>Can I switch game modes?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Yeah. Hit up an admin on Discord or use in-game commands if you have perms. Each mode is its own world.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-delay="400">
+          <button class="faq-question" onclick="toggleFAQ(this)">
+            <span>When's Lifesteal coming?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              We're still working on it. Join the Discord to get updates and help test it when it's ready.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 HelvornSMP</p>
+  </footer>
+
+  <script src="base.js"></script>
+</body>
+
+</html>
