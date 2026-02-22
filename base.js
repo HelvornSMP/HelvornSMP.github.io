@@ -159,14 +159,20 @@ async function checkStatus() {
     if (!response.ok) throw new Error();
 
     const data = await response.json();
-    const isOnline = !!data && data.online === true;
-    if (isOnline) {
+    const playersObj = data && data.players ? data.players : {};
+    const reportedOnline = data && data.online === true;
+    const onlineCount = typeof playersObj.online === 'number' ? playersObj.online : null;
+    const maxCount = typeof playersObj.max === 'number' ? playersObj.max : null;
+    const listPresent = Array.isArray(playersObj.list) && playersObj.list.length > 0;
+
+    const effectiveOnline = reportedOnline && (
+      (typeof maxCount === 'number' && maxCount > 0) ||
+      (typeof onlineCount === 'number' && onlineCount > 0) ||
+      listPresent
+    );
+
+    if (effectiveOnline) {
       dot.classList.add('online');
-
-      const playersObj = data.players || {};
-      const onlineCount = typeof playersObj.online === 'number' ? playersObj.online : null;
-      const maxCount = typeof playersObj.max === 'number' ? playersObj.max : null;
-
       if (onlineCount !== null && maxCount !== null) {
         text.textContent = `Server Online - ${onlineCount}/${maxCount} players`;
       } else {
