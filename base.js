@@ -1,44 +1,53 @@
-// Intersection Observer for scroll animations
-const scrollObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const delay = entry.target.dataset.delay || 0;
-      setTimeout(() => {
-        entry.target.classList.add('animate');
-      }, delay);
-      scrollObserver.unobserve(entry.target);
+// Scroll reveal animation
+function reveal() {
+    var reveals = document.querySelectorAll(".card, .hero-content, section h2");
+    
+    for (var i = 0; i < reveals.length; i++) {
+        var windowHeight = window.innerHeight;
+        var elementTop = reveals[i].getBoundingClientRect().top;
+        var elementVisible = 150;
+        
+        if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add("active");
+        }
     }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+}
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.card, .mode-card, .faq-item, .hero-content, .section-header, .btn').forEach(el => {
-    el.classList.add('reveal-on-scroll');
-    scrollObserver.observe(el);
-  });
+document.addEventListener("DOMContentLoaded", function() {
+    var cards = document.querySelectorAll(".card");
+    cards.forEach(function(card) {
+        card.classList.add("reveal");
+    });
+    reveal();
 });
 
-// Particle animation with mouse interaction
-const canvas = document.getElementById('particleCanvas');
-const ctx = canvas.getContext('2d');
+window.addEventListener("scroll", reveal);
 
-let particles = [];
-let mouse = { x: null, y: null, radius: 200 };
+// Particle canvas setup
+var canvas = document.getElementById("particleCanvas");
+var ctx = canvas.getContext("2d");
+var particles = [];
+var mouse = {
+    x: null,
+    y: null,
+    radius: 150
+};
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 }
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
 
-window.addEventListener('mousemove', e => {
-  mouse.x = e.x;
-  mouse.y = e.y;
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+window.addEventListener("mousemove", function(e) {
+    mouse.x = e.x;
+    mouse.y = e.y;
 });
 
-class Particle {
-  constructor() {
+// Particle class
+function Particle() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
     this.size = Math.random() * 2 + 0.5;
@@ -46,209 +55,208 @@ class Particle {
     this.baseY = this.y;
     this.density = (Math.random() * 30) + 1;
     this.color = '#c9b458';
-  }
+}
 
-  draw() {
+Particle.prototype.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fillStyle = this.color;
-    ctx.globalAlpha = 0.4;
+    ctx.globalAlpha = 0.5;
     ctx.fill();
-  }
+};
 
-  update() {
-    let dx = mouse.x - this.x;
-    let dy = mouse.y - this.y;
-    let distance = Math.sqrt(dx * dx + dy * dy);
+Particle.prototype.update = function() {
+    var dx = mouse.x - this.x;
+    var dy = mouse.y - this.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    var forceDirectionX = dx / distance;
+    var forceDirectionY = dy / distance;
+    var maxDistance = mouse.radius;
+    var force = (maxDistance - distance) / maxDistance;
+    var directionX = forceDirectionX * force * this.density;
+    var directionY = forceDirectionY * force * this.density;
 
     if (distance < mouse.radius) {
-      let forceDirectionX = dx / distance;
-      let forceDirectionY = dy / distance;
-      let maxDistance = mouse.radius;
-      let force = (maxDistance - distance) / maxDistance;
-      let directionX = forceDirectionX * force * this.density;
-      let directionY = forceDirectionY * force * this.density;
-      this.x -= directionX;
-      this.y -= directionY;
+        this.x -= directionX;
+        this.y -= directionY;
     } else {
-      if (this.x !== this.baseX) {
-        let dx = this.x - this.baseX;
-        this.x -= dx / 20;
-      }
-      if (this.y !== this.baseY) {
-        let dy = this.y - this.baseY;
-        this.y -= dy / 20;
-      }
+        if (this.x !== this.baseX) {
+            var dx = this.x - this.baseX;
+            this.x -= dx / 10;
+        }
+        if (this.y !== this.baseY) {
+            var dy = this.y - this.baseY;
+            this.y -= dy / 10;
+        }
     }
 
-    this.baseX += (Math.random() - 0.5) * 0.1;
-    this.baseY += (Math.random() - 0.5) * 0.1;
-  }
+    this.baseX += (Math.random() - 0.5) * 0.2;
+    this.baseY += (Math.random() - 0.5) * 0.2;
+};
+
+function init() {
+    particles = [];
+    var numberOfParticles = (canvas.width * canvas.height) / 9000;
+    for (var i = 0; i < numberOfParticles; i++) {
+        particles.push(new Particle());
+    }
 }
 
-function initParticles() {
-  particles = [];
-  let numberOfParticles = (canvas.width * canvas.height) / 10000;
-  for (let i = 0; i < numberOfParticles; i++) {
-    particles.push(new Particle());
-  }
-}
-initParticles();
+init();
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
-  }
-  requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+    }
+    requestAnimationFrame(animate);
 }
+
 animate();
 
 // Theme toggle
-const themeToggle = document.getElementById('themeToggle');
-const themeText = document.getElementById('themeText');
-const currentTheme = localStorage.getItem('theme') || 'dark';
+var themeToggle = document.getElementById('themeToggle');
+var themeText = document.getElementById('themeText');
+var currentTheme = localStorage.getItem('theme') || 'dark';
 
 if (currentTheme === 'light') {
-  document.documentElement.setAttribute('data-theme', 'light');
-  if (themeText) themeText.textContent = 'Dark Mode';
+    document.documentElement.setAttribute('data-theme', 'light');
+    themeText.textContent = 'Dark Mode';
 }
 
-themeToggle?.addEventListener('click', function () {
-  const theme = document.documentElement.getAttribute('data-theme');
-  if (theme === 'light') {
-    document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'dark');
-    if (themeText) themeText.textContent = 'Light Mode';
-  } else {
-    document.documentElement.setAttribute('data-theme', 'light');
-    localStorage.setItem('theme', 'light');
-    if (themeText) themeText.textContent = 'Dark Mode';
-  }
+themeToggle.addEventListener('click', function() {
+    var theme = document.documentElement.getAttribute('data-theme');
+    if (theme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+        themeText.textContent = 'Light Mode';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeText.textContent = 'Dark Mode';
+    }
 });
 
-// Check server status
-async function checkStatus() {
-  const dot = document.getElementById('statusDot');
-  const text = document.getElementById('statusText');
+// Intersection observer for cards
+var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+            var delay = entry.target.dataset.delay || 0;
+            setTimeout(function() {
+                entry.target.classList.add('animate');
+            }, delay);
+            observer.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+});
 
-  if (!dot || !text) return;
+document.querySelectorAll('.card, .mode-card, .faq-item').forEach(function(el) {
+    observer.observe(el);
+});
 
-  text.textContent = 'Checking Server...';
+// Server status checker
+async function checkServerStatus() {
+    const statusDiv = document.getElementById('status');
+    statusDiv.innerHTML = '<span style="color:var(--muted)">Checking Server...</span>';
 
-  try {
-    const response = await fetch('https://api.mcsrvstat.us/3/helvornnetwork.playserver.pro');
-    if (!response.ok) throw new Error('API request failed');
+    try {
+        const response = await fetch('https://api.mcsrvstat.us/3/helvornsmp.playserver.pro');
+        if (!response.ok) throw new Error();
 
-    const data = await response.json();
-    console.log('Server API Response:', data);
-
-    const isOnline = data && data.online === true;
-    const playersObj = data && data.players ? data.players : {};
-    const onlineCount = playersObj.online ?? 0;
-    const maxCount = playersObj.max ?? 0;
-
-    if (isOnline) {
-      dot.classList.add('online');
-      // If we have player counts, show them. Otherwise just say Online.
-      if (typeof playersObj.online === 'number' && typeof playersObj.max === 'number') {
-        text.textContent = `Server Online - ${onlineCount}/${maxCount} players`;
-      } else {
-        text.textContent = 'Server Online';
-      }
-    } else {
-      dot.classList.remove('online');
-      text.textContent = 'Server Offline - 0/30 players';
+        const data = await response.json();
+        if (data.online) {
+            statusDiv.innerHTML = `<span style="color:#55ff55">●</span> ONLINE <span style="color:var(--muted); margin-left:8px;">${data.players.online}/${data.players.max}</span>`;
+        } else {
+            statusDiv.innerHTML = `<span style="color:#ff5555">●</span> OFFLINE`;
+        }
+    } catch (error) {
+        statusDiv.innerHTML = `<span style="color:#ffaa00">●</span> STATUS UNKNOWN`;
     }
-  } catch (error) {
-    dot.classList.remove('online');
-    text.textContent = 'Server Offline - 0/30 players';
-    console.error('checkStatus error:', error);
-  }
 }
 
-checkStatus();
-setInterval(checkStatus, 60000);
+checkServerStatus();
+setInterval(checkServerStatus, 60000);
 
-// Copy to clipboard
-function copyToClipboard(elementId, btn) {
-  const text = document.getElementById(elementId).textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const originalText = btn.textContent;
-    btn.textContent = 'Copied!';
-    btn.style.background = '#55ff55';
-    btn.style.color = '#000';
-    setTimeout(() => {
-      btn.textContent = originalText;
-      btn.style.background = '';
-      btn.style.color = '';
-    }, 2000);
-  });
+// Copy IP to clipboard
+function copyToClipboard(elementId) {
+    var text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text).then(function() {
+        var btn = event.target;
+        var originalText = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.background = '#55ff55';
+        btn.style.color = '#000';
+        setTimeout(function() {
+            btn.textContent = originalText;
+            btn.style.background = '';
+            btn.style.color = '';
+        }, 2000);
+    });
 }
 
-// Load players online
-const SERVER_IP = 'helvornnetwork.playserver.pro';
+// Load online players
+var SERVER_IP = 'helvornnetwork.playserver.pro';
 
 async function loadPlayers() {
-  try {
-    const response = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
-    const data = await response.json();
-    console.log('Player List API Response:', data);
-
-    const countEl = document.getElementById('playerCount');
-    const listEl = document.getElementById('playerList');
-
-    if (!countEl || !listEl) return;
-
-    if (!data || !data.online) {
-      countEl.textContent = '0 Players Online';
-      listEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
-      return;
+    try {
+        const response = await fetch(`https://api.mcsrvstat.us/3/${SERVER_IP}`);
+        const data = await response.json();
+        
+        const countEl = document.getElementById('playerCount');
+        const listEl = document.getElementById('playerList');
+        
+        if (!data.online || !data.players.list) {
+            countEl.textContent = '0 Players Online';
+            listEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
+            return;
+        }
+        
+        countEl.textContent = `${data.players.online}/${data.players.max} players online`;
+        
+        if (data.players.online === 0) {
+            listEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
+            return;
+        }
+        
+        var playerHTML = '';
+        for (var i = 0; i < data.players.list.length; i++) {
+            var player = data.players.list[i];
+            var name = typeof player === 'string' ? player : (player.name || 'Unknown');
+            playerHTML += `
+                <div class="player-entry">
+                    <img src="https://mc-heads.net/avatar/${name}/40" 
+                         alt="${name}" 
+                         class="player-avatar" 
+                         onerror="this.src='https://mc-heads.net/avatar/steve/40'">
+                    <span class="player-name">${name}</span>
+                </div>
+            `;
+        }
+        listEl.innerHTML = playerHTML;
+    } catch (err) {
+        document.getElementById('playerCount').textContent = 'Unable to load players';
     }
-
-    const playersObj = data.players || {};
-    const onlineCount = playersObj.online ?? 0;
-    const maxCount = playersObj.max ?? 0;
-
-    countEl.textContent = `${onlineCount}/${maxCount} players online`;
-
-    if (!playersObj.list || playersObj.list.length === 0) {
-      listEl.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">No players online</p>';
-      return;
-    }
-
-    listEl.innerHTML = data.players.list.map(player => {
-      const name = typeof player === 'string' ? player : (player.name || 'Unknown');
-      return `
-        <div class="player-entry">
-          <img src="https://mc-heads.net/avatar/${name}/40" alt="${name}" class="player-avatar" onerror="this.src='https://mc-heads.net/avatar/steve/40'">
-          <span class="player-name">${name}</span>
-        </div>
-      `;
-    }).join('');
-  } catch (err) {
-    const countEl = document.getElementById('playerCount');
-    if (countEl) countEl.textContent = 'Unable to load players';
-    console.error('loadPlayers error', err);
-  }
 }
 
 loadPlayers();
-setInterval(loadPlayers, 30000);
+setInterval(loadPlayers, 5000);
 
-// Toggle FAQ items
+// FAQ toggle
 function toggleFAQ(btn) {
-  const item = btn.parentElement;
-  const wasActive = item.classList.contains('active');
-
-  document.querySelectorAll('.faq-item').forEach(el => {
-    el.classList.remove('active');
-  });
-
-  if (!wasActive) {
-    item.classList.add('active');
-  }
+    var item = btn.parentElement;
+    var wasActive = item.classList.contains('active');
+    
+    var allItems = document.querySelectorAll('.faq-item');
+    for (var i = 0; i < allItems.length; i++) {
+        allItems[i].classList.remove('active');
+    }
+    
+    if (!wasActive) {
+        item.classList.add('active');
+    }
 }
-
