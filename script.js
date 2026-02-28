@@ -115,23 +115,25 @@ themeBtn.addEventListener('click', function() {
 });
 
 // Server status checker
-async function checkServerStatus() {
-    const statusDiv = document.getElementById('server-status');
+function checkServerStatus() {
+    var statusDiv = document.getElementById('server-status');
     statusDiv.innerHTML = '<span style="color:var(--text-secondary)">Checking Server...</span>';
 
-    try {
-        const response = await fetch('https://api.mcsrvstat.us/3/helvornnetwork.playserver.pro');
-        if (!response.ok) throw new Error();
-
-        const data = await response.json();
-        if (data.online) {
-            statusDiv.innerHTML = `<span style="color:#55ff55">●</span> ONLINE <span style="color:var(--text-secondary); margin-left:8px;">${data.players.online}/${data.players.max}</span>`;
-        } else {
-            statusDiv.innerHTML = `<span style="color:#ff5555">●</span> OFFLINE`;
-        }
-    } catch (error) {
-        statusDiv.innerHTML = `<span style="color:#ffaa00">●</span> STATUS UNKNOWN`;
-    }
+    fetch('https://api.mcsrvstat.us/3/helvornnetwork.playserver.pro')
+        .then(function(response) {
+            if (!response.ok) throw new Error();
+            return response.json();
+        })
+        .then(function(data) {
+            if (data.online) {
+                statusDiv.innerHTML = '<span style="color:#55ff55">●</span> ONLINE <span style="color:var(--text-secondary); margin-left:8px;">' + data.players.online + '/' + data.players.max + '</span>';
+            } else {
+                statusDiv.innerHTML = '<span style="color:#ff5555">●</span> OFFLINE';
+            }
+        })
+        .catch(function(error) {
+            statusDiv.innerHTML = '<span style="color:#ffaa00">●</span> STATUS UNKNOWN';
+        });
 }
 
 checkServerStatus();
@@ -162,45 +164,47 @@ function copyIP(elementId) {
 // Load online players
 var serverIP = 'helvornnetwork.playserver.pro';
 
-async function loadPlayers() {
-    try {
-        const response = await fetch('https://api.mcsrvstat.us/3/' + serverIP);
-        const data = await response.json();
-        
-        const playerCount = document.getElementById('player-count');
-        const playerList = document.getElementById('player-list');
-        
-        if (!data.online || !data.players.list) {
-            playerCount.textContent = '0 Players Online';
-            playerList.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Nobody online right now</p>';
-            return;
-        }
-        
-        playerCount.textContent = data.players.online + '/' + data.players.max + ' players online';
-        
-        if (data.players.online === 0) {
-            playerList.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Nobody online right now</p>';
-            return;
-        }
-        
-        var html = '';
-        for (var i = 0; i < data.players.list.length; i++) {
-            var player = data.players.list[i];
-            var playerName = typeof player === 'string' ? player : (player.name || 'Unknown');
+function loadPlayers() {
+    fetch('https://api.mcsrvstat.us/3/' + serverIP)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            var playerCount = document.getElementById('player-count');
+            var playerList = document.getElementById('player-list');
             
-            html += '<div class="player-item">';
-            html += '<img src="https://mc-heads.net/avatar/' + playerName + '/40" ';
-            html += 'alt="' + playerName + '" ';
-            html += 'onerror="this.src=\'https://mc-heads.net/avatar/steve/40\'">';
-            html += '<span>' + playerName + '</span>';
-            html += '</div>';
-        }
-        
-        playerList.innerHTML = html;
-    } catch (err) {
-        document.getElementById('player-count').textContent = 'Failed to load players';
-        console.log('Player load error:', err);
-    }
+            if (!data.online || !data.players.list) {
+                playerCount.textContent = '0 Players Online';
+                playerList.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Nobody online right now</p>';
+                return;
+            }
+            
+            playerCount.textContent = data.players.online + '/' + data.players.max + ' players online';
+            
+            if (data.players.online === 0) {
+                playerList.innerHTML = '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Nobody online right now</p>';
+                return;
+            }
+            
+            var html = '';
+            for (var i = 0; i < data.players.list.length; i++) {
+                var player = data.players.list[i];
+                var playerName = typeof player === 'string' ? player : (player.name || 'Unknown');
+                
+                html += '<div class="player-item">';
+                html += '<img src="https://mc-heads.net/avatar/' + playerName + '/40" ';
+                html += 'alt="' + playerName + '" ';
+                html += 'onerror="this.src=\'https://mc-heads.net/avatar/steve/40\'">';
+                html += '<span>' + playerName + '</span>';
+                html += '</div>';
+            }
+            
+            playerList.innerHTML = html;
+        })
+        .catch(function(err) {
+            document.getElementById('player-count').textContent = 'Failed to load players';
+            console.log('Player load error:', err);
+        });
 }
 
 loadPlayers();
