@@ -124,12 +124,19 @@ function checkServerStatus() {
             return response.json();
         })
         .then(function(data) {
+            console.log('Server status response:', data);
+            
             if (data.online) {
-                var online = data.players.online || 0;
-                var max = data.players.max || 0;
-                statusDiv.innerHTML = '<span style="color:#55ff55">●</span> ONLINE <span style="color:var(--text-secondary); margin-left:8px;">' + online + '/' + max + '</span>';
+                var online = data.players && data.players.online !== undefined ? data.players.online : 0;
+                var max = data.players && data.players.max !== undefined ? data.players.max : 0;
+                
+                if (online === 0 && max === 0) {
+                    statusDiv.innerHTML = '<span style="color:#55ff55">●</span> ONLINE <span style="color:var(--text-secondary); margin-left:8px;">Server is warming up...</span>';
+                } else {
+                    statusDiv.innerHTML = '<span style="color:#55ff55">●</span> ONLINE <span style="color:var(--text-secondary); margin-left:8px;">' + online + '/' + max + '</span>';
+                }
             } else {
-                statusDiv.innerHTML = '<span style="color:#ff5555">●</span> OFFLINE';
+                statusDiv.innerHTML = '<span style="color:#ff5555">●</span> OFFLINE (Join to wake)';
             }
         })
         .catch(function(error) {
